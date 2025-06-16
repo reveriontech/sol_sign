@@ -1,0 +1,136 @@
+@use "../utils/variables" as button;
+
+$mobile: 360px;
+$tablet: 768px;
+$desktop: 1024px;
+
+.button {
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.375rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  outline: none;
+  border: none;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-width: 8rem;
+  font-family: inherit;
+  font-size: 1rem;
+  line-height: 1.5;
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+
+  // Size variants
+  &--small {
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+    min-width: 6rem;
+  }
+
+  &--large {
+    padding: 1rem 2rem;
+    font-size: 1.125rem;
+    min-width: 10rem;
+  }
+
+  // Primary button styles
+  &--primary {
+    background-color: #2563eb;
+    color: white;
+    box-shadow: 0 2px 4px rgba(37, 99, 235, 0.1);
+
+    &:hover:not(:disabled) {
+      background-color: #1d4ed8;
+      box-shadow: 0 4px 6px rgba(37, 99, 235, 0.15);
+    }
+
+    &:active:not(:disabled) {
+      background-color: #1d4ed8;
+      transform: translateY(1px);
+    }
+  }
+
+  // Secondary button styles
+  &--secondary {
+    background-color: #374151;
+    color: white;
+
+    &:hover:not(:disabled) {
+      background-color: #1f2937;
+    }
+
+    &:active:not(:disabled) {
+      background-color: #111827;
+    }
+  }
+
+  // Outline button styles
+  &--outline {
+    border: 2px solid button.$color-gray-600;
+    background-color: transparent;
+    color: button.$color-gray-600;
+
+    &:hover:not(:disabled) {
+      background-color: button.$color-blue-50;
+      color: button.$color-gray-300;
+    }
+
+    &:active:not(:disabled) {
+      background-color: #1d4ed8;
+    }
+  }
+
+  // Danger button styles
+  &--danger {
+    background-color: #ef4444;
+    color: white;
+
+    &:hover:not(:disabled) {
+      background-color: #dc2626;
+    }
+
+    &:active:not(:disabled) {
+      background-color: #b91c1c;
+    }
+  }
+
+  // Loading state
+  &--loading {
+    position: relative;
+    pointer-events: none;
+
+    &::after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 1.25rem;
+      height: 1.25rem;
+      margin: -0.625rem 0 0 -0.625rem;
+      border: 2px solid currentColor;
+      border-radius: 50%;
+      border-top-color: transparent;
+      animation: spin 1s linear infinite;
+    }
+  }
+
+  // Icon-only button
+  &--icon-only {
+    padding: 0.75rem;
+    min-width: auto;
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

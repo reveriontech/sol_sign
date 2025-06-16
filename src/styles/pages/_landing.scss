@@ -48,11 +48,12 @@ $desktop: 1024px;
         }
     }
 
-    // 
+    // cards
 
     .landing-content {
         display: flex;
         flex-direction: column;
+        margin-top: 4rem;
 
         .landing-content-text {
             display: flex;
@@ -62,6 +63,7 @@ $desktop: 1024px;
             gap: 1rem;
             width: 100%;
             padding: 2rem;
+            text-align: center;
 
             h1 {
                 font-size: 2.5rem;
@@ -143,7 +145,8 @@ $desktop: 1024px;
                         padding: 0.5rem 1rem; 
                         border-radius: 0.25rem; 
                         cursor: pointer; 
-                        width: 50%;
+                        width: 80%;
+                        margin-top: 4rem;
                     }
                 }
                
@@ -151,4 +154,102 @@ $desktop: 1024px;
         }
       
     }
+}
+
+// Responsive styles
+@media (max-width: $tablet) {
+  .landing-container {
+    nav {
+      flex-direction: column;
+      padding: 1rem;
+      .profile {
+        margin-right: 0;
+        margin-top: 1rem;
+      }
+    }
+    .landing-content {
+      margin-top: 2rem;
+      .landing-content-text {
+        padding: 1rem;
+        h1 {
+          font-size: 2rem;
+        }
+        p {
+          font-size: 1rem;
+        }
+      }
+      .landing-content-cards {
+        flex-direction: column;
+        gap: 2rem;
+        padding: 1rem 0.5rem;
+        .cards-container {
+          width: 100%;
+          max-width: 22rem;
+          height: auto;
+          padding: 1rem 0.5rem;
+          p {
+            text-align: center;
+          }
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: $mobile) {
+  .landing-container {
+    nav {
+      padding: 0.5rem;
+      img {
+        height: 2rem;
+      }
+      .profile {
+        .profile-image {
+          height: 2rem;
+          width: 2rem;
+        }
+        p {
+          font-size: 0.9rem;
+        }
+      }
+    }
+    .landing-content {
+      margin-top: 1rem;
+      .landing-content-text {
+        padding: 0.5rem;
+        h1 {
+          font-size: 1.3rem;
+        }
+        p {
+          font-size: 0.95rem;
+        }
+      }
+      .landing-content-cards {
+        gap: 1rem;
+        padding: 0.5rem 0;
+        .cards-container {
+          width: 100%;
+          max-width: 100%;
+          padding: 0.5rem 0.2rem;
+          .card-icon {
+            font-size: 2rem;
+            width: 2.5rem;
+            height: 2.5rem;
+          }
+          h3 {
+            font-size: 1.1rem;
+          }
+          p {
+            font-size: 0.95rem;
+            text-align: center;
+          }
+          .card-button button {
+            font-size: 0.95rem;
+            padding: 0.4rem 0.5rem;
+            margin-top: 2rem;
+          }
+        }
+      }
+    }
+  }
 }

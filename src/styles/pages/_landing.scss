@@ -1,0 +1,154 @@
+@use '../utils/variables' as landing;
+
+$mobile: 360px;
+$tablet: 768px;
+$desktop: 1024px;
+
+.landing-container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    width: 100%;
+
+    nav {
+        display: flex;
+        padding: 1.5rem;
+        align-items: center;
+        width: 100%;
+        justify-content: space-between;
+        background-color: #D9D9D9;
+
+        img {
+            height: 3rem;
+            width: auto;
+            object-fit: contain;
+        }
+
+        .profile {
+            display: flex;
+            align-items: center;  
+            gap: 0.5rem;
+            margin-right: 4rem;
+
+            .profile-image {
+                height: 2.5rem;
+                width: 2.5rem; 
+                object-fit: cover; 
+                border-radius: 50%;
+            }
+
+            p { 
+                font-size: 1rem;
+                font-weight: landing.$font-weight-normal;
+                color: #000;
+                margin: 0; 
+                display: flex;
+                align-items: center;
+            }
+        }
+    }
+
+    // 
+
+    .landing-content {
+        display: flex;
+        flex-direction: column;
+
+        .landing-content-text {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            width: 100%;
+            padding: 2rem;
+
+            h1 {
+                font-size: 2.5rem;
+                font-weight: landing.$font-weight-bold;
+                color: landing.$color-black;
+            }
+            
+            p {
+                font-size: 1.2rem;
+            }
+        }
+
+        // Cards
+
+        .landing-content-cards {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+            gap: 3rem;
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+
+            .cards-container {
+                border: 1px solid #000;
+                border-radius: 1rem;
+                padding: 0.5rem;
+                width: 20rem;
+                height: 25rem;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                gap: 1rem;
+                text-align: center; 
+
+                .card-icon {
+                    font-size: 3rem;
+                    color: #fff;  
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    width: 4rem;  
+                    height: 4rem;  
+                    background-color: landing.$color-primary;
+                    border-radius: 0.5rem;  
+                    margin-bottom: 1rem;  
+                }
+
+                h3 {
+                    font-size: 1.5rem;
+                    font-weight: landing.$font-weight-bold;
+                    color: landing.$color-black;
+                    text-align: center; 
+                }
+                
+                p {
+                    font-size: 1rem;
+                    font-weight: landing.$font-weight-normal;
+                    color: landing.$color-black;
+                    text-align: center; 
+                    width: 100%; 
+                }
+
+                .card-button {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    width: 100%;
+
+                    button {
+                        background-color: landing.$color-blue-50;
+                        font-size: 1rem;
+                        font-weight: landing.$font-weight-normal;
+                        color: #fff;
+                        border: none;
+                        padding: 0.5rem 1rem; 
+                        border-radius: 0.25rem; 
+                        cursor: pointer; 
+                        width: 50%;
+                    }
+                }
+               
+            }
+        }
+      
+    }
+}

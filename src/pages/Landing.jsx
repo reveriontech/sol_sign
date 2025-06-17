@@ -17,7 +17,7 @@ const Landing = () => {
       description: "Upload your documents to the platform",
       button: "Upload",
       onClick: () => {
-        navigate("/home/upload");
+        navigate("/upload");
       },
     },
     {
@@ -26,7 +26,7 @@ const Landing = () => {
       description: "Upload your documents to the platform",
       button: "Upload",
       onClick: () => {
-        navigate("/home/smart-signature");
+        navigate("/smart-signature");
       },
     },
     {
@@ -35,7 +35,7 @@ const Landing = () => {
       description: "Upload your documents to the platform",
       button: "Upload",
       onClick: () => {
-        navigate("/home/document-upload");
+        navigate("/document-upload");
       },
     },
   ];

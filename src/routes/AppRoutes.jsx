@@ -1,6 +1,9 @@
 import React, { Suspense } from "react";
 import { Routes, Route, BrowserRouter } from "react-router-dom";
 import PageLoader from "../components/PageLoader";
+import { SessionProvider } from "./SessionProvider";
+import AccessProvider from "./AccessProvider";
+import HomeProvider from "./HomeProvider";
 
 // For pages
 const Intro = React.lazy(() => import("../pages/Intro"));
@@ -13,19 +16,24 @@ const AppRoutes = () => {
   return (
     <BrowserRouter>
 
-      <Suspense fallback={<PageLoader />}>
-        <Routes>
+      <SessionProvider>
 
-          {/* For Intro page */}
-          <Route path="/" element={<Intro />} />
+        <Suspense fallback={<PageLoader />}>
+          <Routes>
 
-            <Route path="/home" element={<Home />}>
-              <Route index element={<Landing />} />
-              <Route path="/home/landing" element={<Landing />}/>
-              <Route path="/home/upload" element={<UploadPage />}/>
-            </Route>
-        </Routes>
-      </Suspense>
+            {/* For Intro page */}
+            <Route path="/" element={<AccessProvider><Intro /></AccessProvider>} />
+
+              <Route element={<HomeProvider><Home /></HomeProvider>}>
+                <Route index element={<Landing />} />
+                <Route path="/landing" element={<Landing />}/>
+                <Route path="/upload" element={<UploadPage />}/>
+              </Route>
+
+          </Routes>
+        </Suspense>
+
+      </SessionProvider>
       
     </BrowserRouter>
   );

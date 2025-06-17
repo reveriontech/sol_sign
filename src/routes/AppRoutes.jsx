@@ -1,15 +1,11 @@
 import React, { Suspense } from "react";
 import { Routes, Route, BrowserRouter } from "react-router-dom";
 import PageLoader from "../components/PageLoader";
-import { SessionProvider } from "./SessionProvider";
-import AccessProvider from "./AccessProvider";
-import HomeProvider from "./HomeProvider";
 
 // For pages
 const Intro = React.lazy(() => import("../pages/Intro"));
 const Landing = React.lazy(() => import("../pages/Landing"));
 const UploadPage = React.lazy(() => import("../pages/UploadPage"));
-const Home = React.lazy(() => import("../pages/Home"));
 // import SmartSignature from "../pages/SmartSignature";
 
 const AppRoutes = () => {
@@ -28,25 +24,19 @@ const AppRoutes = () => {
           {/* Landing page */}
           <Route
             path="/landing"
-            element={<Landing />}
+            element={<HomeProvider><Landing /></HomeProvider>}
           />
-
-            {/* Landing page */}
-              <Route
-                path="/landing"
-                element={<Landing />}
-              />
               
           {/* Landing page */}
                <Route
                 path="/rafce"
-                element={<UploadPage />}
+                element={<HomeProvider><UploadPage /></HomeProvider>}
               />
               
           {/* Upload page */}
               <Route
                 path="/upload"
-                element={<UploadPage />}
+                element={<HomeProvider><UploadPage /></HomeProvider>}
               />
           
         </Routes>

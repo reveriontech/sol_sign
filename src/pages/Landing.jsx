@@ -17,7 +17,7 @@ const Landing = () => {
       description: "Upload your documents to the platform",
       button: "Upload",
       onClick: () => {
-        navigate("/upload");
+        navigate("/home/upload");
       },
     },
     {
@@ -26,7 +26,7 @@ const Landing = () => {
       description: "Upload your documents to the platform",
       button: "Upload",
       onClick: () => {
-        navigate("/smart-signature");
+        navigate("/home/smart-signature");
       },
     },
     {
@@ -35,15 +35,13 @@ const Landing = () => {
       description: "Upload your documents to the platform",
       button: "Upload",
       onClick: () => {
-        navigate("/document-upload");
+        navigate("/home/document-upload");
       },
     },
   ];
 
   return (
     <section className="landing-container">
-      <Nav />
-
       <div className="landing-content">
         <div className="landing-content-text">
           <h1>Digital Signatures</h1>

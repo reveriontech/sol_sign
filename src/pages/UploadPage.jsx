@@ -2,9 +2,9 @@ import React from 'react'
 
 const UploadPage = () => {
   return (
-    <div>
+    <section className='upload-container'>
       <h1>Upload Page</h1>
-    </div>
+    </section>
   )
 }
 

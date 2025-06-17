@@ -13,6 +13,8 @@ const Nav = () => {
           <p>Hikaru</p>
         </div>
       </nav>
+
+      
   )
 }
 

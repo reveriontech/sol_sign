@@ -1,6 +1,9 @@
 import React, { Suspense } from "react";
 import { Routes, Route, BrowserRouter } from "react-router-dom";
 import PageLoader from "../components/PageLoader";
+import { SessionProvider } from "./SessionProvider";
+import AccessProvider from "./AccessProvider";
+import HomeProvider from "./HomeProvider";
 
 // For pages
 const Intro = React.lazy(() => import("../pages/Intro"));
@@ -12,20 +15,43 @@ const Home = React.lazy(() => import("../pages/Home"));
 const AppRoutes = () => {
   return (
     <BrowserRouter>
+
       <Suspense fallback={<PageLoader />}>
         <Routes>
-          {/* For Intro page - this will be the initial route */}
-          <Route path="/" element={<Intro />} />
 
-          {/* Home layout with nested routes */}
-          <Route path="/home" element={<Home />}>
-            <Route index element={<Landing />} />
-            <Route path="landing" element={<Landing />} />
-            <Route path="upload" element={<UploadPage />} />
-          </Route>
+          {/* For Intro page */}
+          <Route
+            path="/"
+            element={<Intro />}
+          />
+
+          {/* Landing page */}
+          <Route
+            path="/landing"
+            element={<Landing />}
+          />
+
+            {/* Landing page */}
+              <Route
+                path="/landing"
+                element={<Landing />}
+              />
+              
+          {/* Landing page */}
+               <Route
+                path="/rafce"
+                element={<UploadPage />}
+              />
+              
+          {/* Upload page */}
+              <Route
+                path="/upload"
+                element={<UploadPage />}
+              />
           
         </Routes>
       </Suspense>
+      
     </BrowserRouter>
   );
 };

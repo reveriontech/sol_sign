@@ -5,6 +5,8 @@ import PageLoader from "../components/PageLoader";
 // For pages
 const Intro = React.lazy(() => import("../pages/Intro"));
 const Landing = React.lazy(() => import("../pages/Landing"));
+const UploadPage = React.lazy(() => import("../pages/UploadPage"));
+// import SmartSignature from "../pages/SmartSignature";
 
 const AppRoutes = () => {
   return (
@@ -24,6 +26,24 @@ const AppRoutes = () => {
             path="/landing"
             element={<Landing />}
           />
+
+            {/* Landing page */}
+              <Route
+                path="/landing"
+                element={<Landing />}
+              />
+              
+          {/* Landing page */}
+               <Route
+                path="/rafce"
+                element={<UploadPage />}
+              />
+              
+          {/* Upload page */}
+              <Route
+                path="/upload"
+                element={<UploadPage />}
+              />
           
         </Routes>
       </Suspense>

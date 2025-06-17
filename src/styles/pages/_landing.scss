@@ -10,44 +10,6 @@ $desktop: 1024px;
     height: 100vh;
     width: 100%;
 
-    nav {
-        display: flex;
-        padding: 1.5rem;
-        align-items: center;
-        width: 100%;
-        justify-content: space-between;
-        background-color: #D9D9D9;
-
-        img {
-            height: 3rem;
-            width: auto;
-            object-fit: contain;
-        }
-
-        .profile {
-            display: flex;
-            align-items: center;  
-            gap: 0.5rem;
-            margin-right: 4rem;
-
-            .profile-image {
-                height: 2.5rem;
-                width: 2.5rem; 
-                object-fit: cover; 
-                border-radius: 50%;
-            }
-
-            p { 
-                font-size: 1rem;
-                font-weight: landing.$font-weight-normal;
-                color: #000;
-                margin: 0; 
-                display: flex;
-                align-items: center;
-            }
-        }
-    }
-
     // cards
 
     .landing-content {
@@ -136,7 +98,7 @@ $desktop: 1024px;
                     justify-content: center;
                     width: 100%;
 
-                    button {
+                    button {  
                         background-color: landing.$color-blue-50;
                         font-size: 1rem;
                         font-weight: landing.$font-weight-normal;
@@ -147,6 +109,13 @@ $desktop: 1024px;
                         cursor: pointer; 
                         width: 80%;
                         margin-top: 4rem;
+                        text-decoration: none;  
+                        text-align: center;     
+                        display: block;         
+                        
+                        &:hover {
+                            opacity: 0.9;       
+                        }
                     }
                 }
                
@@ -159,14 +128,6 @@ $desktop: 1024px;
 // Responsive styles
 @media (max-width: $tablet) {
   .landing-container {
-    nav {
-      flex-direction: column;
-      padding: 1rem;
-      .profile {
-        margin-right: 0;
-        margin-top: 1rem;
-      }
-    }
     .landing-content {
       margin-top: 2rem;
       .landing-content-text {
@@ -198,21 +159,6 @@ $desktop: 1024px;
 
 @media (max-width: $mobile) {
   .landing-container {
-    nav {
-      padding: 0.5rem;
-      img {
-        height: 2rem;
-      }
-      .profile {
-        .profile-image {
-          height: 2rem;
-          width: 2rem;
-        }
-        p {
-          font-size: 0.9rem;
-        }
-      }
-    }
     .landing-content {
       margin-top: 1rem;
       .landing-content-text {
@@ -243,7 +189,7 @@ $desktop: 1024px;
             font-size: 0.95rem;
             text-align: center;
           }
-          .card-button button {
+          .card-button a {
             font-size: 0.95rem;
             padding: 0.4rem 0.5rem;
             margin-top: 2rem;

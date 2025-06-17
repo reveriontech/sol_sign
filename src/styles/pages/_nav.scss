@@ -1,0 +1,77 @@
+@use '../utils/variables' as nav;
+
+$mobile: 360px;
+$tablet: 768px;
+$desktop: 1024px;
+
+
+nav {
+    display: flex;
+    padding: 1.5rem;
+    align-items: center;
+    width: 100%;
+    justify-content: space-between;
+    background-color: #D9D9D9;
+
+    img {
+        height: 3rem;
+        width: auto;
+        object-fit: contain;
+    }
+
+    .profile {
+        display: flex;
+        align-items: center;  
+        gap: 0.5rem;
+        margin-right: 4rem;
+
+        .profile-image {
+            height: 2.5rem;
+            width: 2.5rem; 
+            object-fit: cover; 
+            border-radius: 50%;
+        }
+
+        p { 
+            font-size: 1rem;
+            font-weight: nav.$font-weight-normal;
+            color: #000;
+            margin: 0; 
+            display: flex;
+            align-items: center;
+        }
+    }
+}
+
+// Responsive styles
+@media (max-width: $tablet) {
+    .nav-container {
+        flex-direction: column;
+        padding: 1rem;
+        .profile {
+          margin-right: 0;
+        margin-top: 1rem;
+      }
+    }
+  }
+  
+  @media (max-width: $mobile) {
+    .nav-container {
+      nav {
+        padding: 0.5rem;
+        img {
+          height: 2rem;
+        }
+        .profile {
+          .profile-image {
+            height: 2rem;
+            width: 2rem;
+          }
+          p {
+            font-size: 0.9rem;
+          }
+        }
+      }
+    }
+  }
+  

@@ -1,5 +1,5 @@
 import React from 'react'
-// import { GoogleAuthFunctions } from '../utils/GoogleAuthFunctions'
+import GoogleAuthFunctions from '../functions/GoogleAuthFunctions'
 import '../styles/pages/_intro.scss'
 
 // Reusable Components
@@ -7,10 +7,10 @@ import Button from '../reusable/Button'
 import logo from '../assets/images/solvistalogo.png'
 
 const Intro = () => {
-  // const {
-  //       isGoogleSigningIn,
-  //       handleGoogleSignIn
-  //   } = GoogleAuthFunctions()
+  const {
+        isGoogleSigningIn,
+        handleGoogleSignIn
+    } = GoogleAuthFunctions()
 
   return (
     <section className='intro-container'>
@@ -23,10 +23,9 @@ const Intro = () => {
               </div>
               <Button variant='outline' 
                   size='small'
-                  onClick={() => {}}
+                  onClick={handleGoogleSignIn}
               >
-                Authenticate
-                  {/* {isGoogleSigningIn ? ('Authenticating') : ('Authenticate')} */}
+                  {isGoogleSigningIn ? ('Authenticating') : ('Authenticate')}
               </Button>
           </div>
        

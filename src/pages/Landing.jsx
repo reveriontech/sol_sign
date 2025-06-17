@@ -1,52 +1,48 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import "../styles/pages/_landing.scss";
 import logo from "../assets/images/solvistalogo.png";
 import profile from "../assets/images/hikaru.jpg";
-import { FaFilePdf } from "react-icons/fa";
+import { FaFilePdf, FaFileSignature } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
+import Nav from "./Nav";
 
 const Landing = () => {
   const { card, useCard } = useState();
-
+  const navigate = useNavigate();
   const cards = [
     {
       icon: <FaFilePdf />,
-      title: "Upload",
+      title: "Document Upload",
       description: "Upload your documents to the platform",
       button: "Upload",
       onClick: () => {
-        console.log("Upload");
+        navigate("/upload");
+      },
+    },
+    {
+      icon: <FaFileSignature />,
+      title: "Smart Signature",
+      description: "Upload your documents to the platform",
+      button: "Upload",
+      onClick: () => {
+        navigate("/smart-signature");
       },
     },
     {
       icon: <FaFilePdf />,
-      title: "Upload",
+      title: "Document Upload",
       description: "Upload your documents to the platform",
       button: "Upload",
       onClick: () => {
-        console.log("Upload");
-      },
-    },
-    {
-      icon: <FaFilePdf />,
-      title: "Upload",
-      description: "Upload your documents to the platform",
-      button: "Upload",
-      onClick: () => {
-        console.log("Upload");
+        navigate("/document-upload");
       },
     },
   ];
 
   return (
     <section className="landing-container">
-      <nav>
-        <img src={logo} alt="Sol Vista DocSign" />
-
-        <div className="profile">
-          <img className="profile-image" src={profile} alt="Hikaru" />
-          <p>Hikaru</p>
-        </div>
-      </nav>
+      <Nav />
 
       <div className="landing-content">
         <div className="landing-content-text">
@@ -65,10 +61,8 @@ const Landing = () => {
               <div className="card-icon">{card.icon}</div>
               <h3>{card.title}</h3>
               <p>{card.description}</p>
-
-              {/* This is for button */}
               <div className="card-button">
-                <button>{card.button}</button>
+                <button onClick={card.onClick}>{card.button}</button>
               </div>
             </div>
           ))}

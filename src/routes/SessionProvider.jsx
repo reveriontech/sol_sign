@@ -12,7 +12,7 @@ export const SessionProvider = ({ children }) => {
     const navigate = useNavigate()
     const location = useLocation()
     
-    const homeRoutes = [ '/landing' ]
+    const homeRoutes = [ '/landing', '/upload', '/rafce' ]
     
     useEffect(() => {
         let subscription

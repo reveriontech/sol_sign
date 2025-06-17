@@ -14,7 +14,7 @@ function HomeProvider({ children }) {
         navigate
     } = Session()
 
-    const homeRoutes = [ '/landing' ]
+    const homeRoutes = [ '/landing', '/upload', '/rafce' ]
 
     if (loading) {
         return (

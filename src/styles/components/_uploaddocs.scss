@@ -1,8 +1,11 @@
 @use "../utils/variables" as uploaddocs;
 
+// Breakpoints
 $mobile: 360px;
 $tablet: 768px;
-$desktop: 1024px;
+$small-desktop: 1024px;
+$medium-desktop: 1280px;
+$large-desktop: 1440px;
 
 .upload-docs-container {
   width: 100%;
@@ -12,6 +15,7 @@ $desktop: 1024px;
   background-color: white;
   align-items: center;
   gap: 2rem;
+  padding: 1rem;
 
   .upload-box-container {
     border: 1px solid uploaddocs.$color-gray-400;
@@ -52,7 +56,6 @@ $desktop: 1024px;
       }
     }
 
-    // Upload Box Content
     .upload-box-content {
       display: flex;
       flex-direction: column;
@@ -60,6 +63,17 @@ $desktop: 1024px;
       justify-content: center;
       margin-bottom: 3rem;
       flex: 1;
+      padding: 0 1rem;
+
+      .box-content-body-row {
+        display: flex;
+        flex-direction: row;
+        align-items: flex-start;
+        justify-content: center;
+        width: 100%;
+        max-width: 800px;
+        gap: 2rem;
+      }
 
       .box-content-body {
         display: flex;
@@ -73,68 +87,231 @@ $desktop: 1024px;
         padding: 2rem 1.5rem 1.5rem 1.5rem;
         margin: 0 auto;
 
-        .logo-picture {
-          width: 60px;
-          height: 60px;
-          margin-bottom: 1.2rem;
-          object-fit: contain;
-          padding: 0.5rem;
-          background: #fff;
-          border-radius: 0.5rem;
-          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
-        }
-
-        h2 {
-          font-size: uploaddocs.$font-size-lg;
-          font-weight: uploaddocs.$font-weight-bold;
-          color: uploaddocs.$color-black;
-          margin-bottom: 0.5rem;
-          text-align: center;
-        }
-
-        .subtext {
-          font-size: uploaddocs.$font-size-sm;
-          color: uploaddocs.$color-gray-600;
-          margin-bottom: 1.5rem;
-          text-align: center;
-        }
-
-        .select-file-btn {
-          display: flex;
-          align-items: center;
-          gap: 0.5rem;
-          background: uploaddocs.$color-white;
-          border: 1px solid uploaddocs.$color-gray-400;
-          border-radius: 0.5rem;
-          padding: 0.6rem 1.2rem;
-          font-size: uploaddocs.$font-size-base;
-          font-weight: uploaddocs.$font-weight-medium;
-          color: uploaddocs.$color-black;
+        &.left {
+          flex: 1 1 0;
           cursor: pointer;
-          margin-bottom: 1.2rem;
-          transition: background 0.2s, border 0.2s;
-          transform: scale(0.8);
+          transition: all 0.3s ease;
 
-          &:hover {
+          &.drag-over {
             background: uploaddocs.$color-gray-200;
-            border-color: uploaddocs.$color-primary;
+            border: 2px dashed uploaddocs.$color-primary;
+            transform: scale(0.99);
+
+            .logo-picture {
+              transform: scale(1.1);
+            }
+
+            h2, .subtext {
+              color: uploaddocs.$color-primary;
+            }
           }
 
-          .btn-logo {
-            width: 24px;
-            height: 24px;
+          .logo-picture {
+            width: 60px;
+            height: 60px;
+            margin-bottom: 1.2rem;
+            object-fit: contain;
+            padding: 0.5rem;
+            background: #fff;
+            border-radius: 0.5rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+            transition: transform 0.3s ease;
           }
 
-          .file-input {
-            display: none;
+          h2 {
+            font-size: uploaddocs.$font-size-lg;
+            font-weight: uploaddocs.$font-weight-bold;
+            color: uploaddocs.$color-black;
+            margin-bottom: 0.5rem;
+            text-align: center;
+          }
+
+          .subtext {
+            font-size: uploaddocs.$font-size-sm;
+            color: uploaddocs.$color-gray-600;
+            margin-bottom: 1.5rem;
+            text-align: center;
+          }
+
+          .select-file-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: uploaddocs.$color-white;
+            border: 1px solid uploaddocs.$color-gray-400;
+            border-radius: 0.5rem;
+            padding: 0.6rem 1.2rem;
+            font-size: uploaddocs.$font-size-base;
+            font-weight: uploaddocs.$font-weight-medium;
+            color: uploaddocs.$color-black;
+            cursor: pointer;
+            margin-bottom: 1.2rem;
+            transition: all 0.2s ease;
+            transform: scale(1);
+
+            &:hover {
+              background: uploaddocs.$color-gray-200;
+              border-color: uploaddocs.$color-primary;
+            }
+
+            .btn-logo {
+              width: 24px;
+              height: 24px;
+            }
+          }
+
+          .support-note {
+            font-size: uploaddocs.$font-size-xs;
+            color: uploaddocs.$color-gray-600;
+            margin-top: 0.5rem;
+            text-align: center;
           }
         }
+      }
+    }
+  }
 
-        .support-note {
+  .file-info-box-container {
+    width: 100%;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    .uploaded-files-list-title {
+      font-size: uploaddocs.$font-size-base;
+      color: uploaddocs.$color-gray-900;
+      font-weight: uploaddocs.$font-weight-bold;
+      margin-bottom: 2rem;
+    }
+
+    .uploaded-files-list {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .file-progress-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: uploaddocs.$color-white;
+      border: 1px solid uploaddocs.$color-gray-200;
+      border-radius: 0.5rem;
+      padding: 0.75rem 1rem;
+      width: 100%;
+      max-width: 500px;
+      transition: all 0.3s ease;
+
+      .file-info {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 0.25rem;
+        
+        .file-name {
+          font-size: uploaddocs.$font-size-sm;
+          color: uploaddocs.$color-gray-900;
+          font-weight: uploaddocs.$font-weight-medium;
+          transition: color 0.3s ease;
+          word-break: break-word;
+        }
+
+        .file-size {
           font-size: uploaddocs.$font-size-xs;
           color: uploaddocs.$color-gray-600;
-          margin-top: 0.5rem;
-          text-align: center;
+        }
+      }
+
+      .file-actions {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        margin-left: 1rem;
+
+        .status-icon {
+          font-size: 1.2rem;
+          flex-shrink: 0;
+          
+          &.loading {
+            color: uploaddocs.$color-primary;
+            animation: spin 1s linear infinite;
+            display: inline-block;
+          }
+          
+          &.success {
+            color: uploaddocs.$color-success;
+          }
+          
+          &.error {
+            color: uploaddocs.$color-danger;
+          }
+        }
+
+        .remove-file-btn {
+          background: none;
+          border: none;
+          color: uploaddocs.$color-gray-600;
+          font-size: 1.2rem;
+          cursor: pointer;
+          padding: 0.25rem;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          transition: all 0.2s;
+          flex-shrink: 0;
+
+          &:hover:not(:disabled) {
+            color: uploaddocs.$color-danger;
+          }
+
+          &:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+          }
+        }
+      }
+
+      &.loading {
+        opacity: 0.8;
+        background: uploaddocs.$color-gray-100;
+        position: relative;
+        overflow: hidden;
+
+        &::after {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: -100%;
+          width: 200%;
+          height: 100%;
+          background: linear-gradient(
+            90deg,
+            transparent,
+            rgba(255, 255, 255, 0.5),
+            transparent
+          );
+          animation: loading-shimmer 2s infinite linear;
+        }
+      }
+
+      &.success {
+        border-color: uploaddocs.$color-success;
+        background: rgba(76, 175, 80, 0.05);
+
+        .file-name {
+          color: uploaddocs.$color-success;
+        }
+      }
+
+      &.error {
+        border-color: uploaddocs.$color-danger;
+        background: rgba(244, 67, 54, 0.05);
+
+        .file-name {
+          color: uploaddocs.$color-danger;
         }
       }
     }
@@ -142,14 +319,43 @@ $desktop: 1024px;
 }
 
 // Responsive styles
-@media (max-width: $desktop) {
+@media (max-width: $large-desktop) {
   .upload-docs-container {
-    margin-top: 2rem;
-    gap: 1.5rem;
-
     .upload-box-container {
       max-width: 90%;
-      
+    }
+  }
+}
+
+@media (max-width: $medium-desktop) {
+  .upload-docs-container {
+    padding: 0.75rem;
+    
+    .upload-box-container {
+      margin-top: 3rem;
+
+      .upload-box-content {
+        .box-content-body {
+          padding: 1.75rem 1.25rem;
+        }
+      }
+    }
+
+    .file-info-box-container {
+      .file-progress-item {
+        max-width: 450px;
+      }
+    }
+  }
+}
+
+@media (max-width: $small-desktop) {
+  .upload-docs-container {
+    padding: 0.5rem;
+    
+    .upload-box-container {
+      margin-top: 2rem;
+
       .upload-box-header {
         padding: 1.2rem;
         
@@ -157,315 +363,186 @@ $desktop: 1024px;
           font-size: uploaddocs.$font-size-xl;
         }
       }
-    }
-  }
 
-  .file-info-box-container {
-    padding: 0.8rem;
-    
-    .file-progress-item {
-      width: 70%;
+      .upload-box-content {
+        margin-bottom: 2rem;
+        
+        .box-content-body {
+          padding: 1.5rem 1rem;
+          
+          &.left {
+            .logo-picture {
+              width: 50px;
+              height: 50px;
+            }
+
+            h2 {
+              font-size: uploaddocs.$font-size-base;
+            }
+
+            .subtext {
+              font-size: uploaddocs.$font-size-sm;
+            }
+
+            .select-file-btn {
+              padding: 0.5rem 1rem;
+              font-size: uploaddocs.$font-size-sm;
+
+              .btn-logo {
+                width: 20px;
+                height: 20px;
+              }
+            }
+          }
+        }
+      }
+    }
+
+    .file-info-box-container {
+      padding: 0.75rem;
+      
+      .file-progress-item {
+        max-width: 400px;
+        padding: 0.6rem 0.75rem;
+
+        .file-info {
+          .file-name {
+            font-size: uploaddocs.$font-size-xs;
+          }
+        }
+
+        .file-actions {
+          gap: 0.35rem;
+          
+          .status-icon {
+            font-size: 1rem;
+          }
+
+          .remove-file-btn {
+            font-size: 1rem;
+          }
+        }
+      }
     }
   }
 }
 
 @media (max-width: $tablet) {
   .upload-docs-container {
-    margin-top: 1.5rem;
-    gap: 1rem;
-
     .upload-box-container {
       max-width: 95%;
-      
-      .upload-box-content {
-        .box-content-body {
-          padding: 1.5rem 1rem;
-          
-          h2 {
-            font-size: uploaddocs.$font-size-lg;
-          }
-          
-          .subtext {
-            font-size: uploaddocs.$font-size-sm;
-          }
-          
-          .select-file-btn {
-            transform: scale(0.9);
-          }
+      margin-top: 1.5rem;
+
+      .upload-box-header {
+        padding: 1rem;
+        margin-bottom: 1.5rem;
+
+        h1 {
+          font-size: uploaddocs.$font-size-lg;
         }
       }
     }
-  }
 
-  .file-info-box-container {
-    .file-progress-item {
-      width: 85%;
+    .file-info-box-container {
+      .file-progress-item {
+        max-width: 100%;
+      }
     }
   }
 }
 
 @media (max-width: $mobile) {
   .upload-docs-container {
-    margin-top: 1rem;
-    gap: 0.8rem;
-
+    gap: 1rem;
+    
     .upload-box-container {
       max-width: 100%;
-      
+      margin-top: 1rem;
+
       .upload-box-header {
-        padding: 1rem;
-        
+        padding: 0.75rem;
+        margin-bottom: 1rem;
+
         h1 {
-          font-size: uploaddocs.$font-size-lg;
+          font-size: uploaddocs.$font-size-base;
         }
-        
+
         p {
-          font-size: uploaddocs.$font-size-sm;
+          font-size: uploaddocs.$font-size-xs;
         }
       }
-      
+
       .upload-box-content {
+        margin-bottom: 1.5rem;
+        
         .box-content-body {
-          padding: 1rem 0.8rem;
+          padding: 1rem 0.75rem;
           
-          .logo-picture {
-            width: 50px;
-            height: 50px;
-          }
-          
-          h2 {
-            font-size: uploaddocs.$font-size-base;
-          }
-          
-          .subtext {
-            font-size: uploaddocs.$font-size-xs;
-          }
-          
-          .select-file-btn {
-            transform: scale(0.8);
-            font-size: uploaddocs.$font-size-sm;
-            
-            .btn-logo {
-              width: 20px;
-              height: 20px;
+          &.left {
+            .logo-picture {
+              width: 40px;
+              height: 40px;
+              margin-bottom: 1rem;
+            }
+
+            h2 {
+              font-size: uploaddocs.$font-size-sm;
+            }
+
+            .subtext {
+              font-size: uploaddocs.$font-size-xs;
+              margin-bottom: 1rem;
+            }
+
+            .select-file-btn {
+              padding: 0.4rem 0.8rem;
+              font-size: uploaddocs.$font-size-xs;
+
+              .btn-logo {
+                width: 16px;
+                height: 16px;
+              }
             }
           }
         }
       }
     }
-  }
 
-  .file-info-box-container {
-    padding: 0.5rem;
-    
-    .uploaded-files-list-title {
-      font-size: uploaddocs.$font-size-sm;
-      margin-bottom: 1rem;
-    }
-    
-    .file-progress-item {
-      width: 95%;
-      padding: 0.6rem 0.8rem;
+    .file-info-box-container {
+      padding: 0.5rem;
       
-      .file-info {
-        .file-name {
-          font-size: uploaddocs.$font-size-xs;
-        }
-        
-        .file-size {
-          font-size: uploaddocs.$font-size-xs;
-        }
-      }
-      
-      .remove-file-btn {
-        font-size: 1rem;
-        padding: 0.2rem;
-      }
-    }
-  }
-}
-
-.box-content-body-row {
-  display: flex;
-  flex-direction: row;
-  align-items: flex-start;
-  justify-content: center;
-  width: 100%;
-  max-width: 800px;
-  gap: 2rem;
-}
-
-.box-content-body.left {
-  flex: 1 1 0;
-  cursor: pointer;
-  transition: all 0.3s ease;
-
-  &.drag-over {
-    background: uploaddocs.$color-gray-200;
-    border: 2px dashed uploaddocs.$color-primary;
-    transform: scale(0.99);
-
-    .logo-picture {
-      transform: scale(1.1);
-    }
-
-    h2, .subtext {
-      color: uploaddocs.$color-primary;
-    }
-  }
-
-  .logo-picture {
-    transition: transform 0.3s ease;
-  }
-}
-
-.file-info-box-container {
-  width: 100%;
-  padding: 1rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-
-  .uploaded-files-list-title {
-    font-size: uploaddocs.$font-size-base;
-    color: uploaddocs.$color-gray-900;
-    font-weight: uploaddocs.$font-weight-bold;
-    margin-bottom: 2rem;
-  }
-
-  .uploaded-files-list {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-  }
-
-  .file-progress-item {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    background: uploaddocs.$color-white;
-    border: 1px solid uploaddocs.$color-gray-200;
-    border-radius: 0.5rem;
-    padding: 0.75rem 1rem;
-    width: 50%;
-    margin-top: 0.5rem;
-    transition: all 0.3s ease;
-
-    .file-actions {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-
-      .status-icon {
-        font-size: 1.2rem;
-        
-        &.loading {
-          color: uploaddocs.$color-primary;
-          animation: spin 1s linear infinite;
-          display: inline-block;
-        }
-        
-        &.success {
-          color: uploaddocs.$color-success;
-        }
-        
-        &.error {
-          color: uploaddocs.$color-danger;
-        }
-      }
-    }
-
-    // Loading state
-    &.loading {
-      opacity: 0.8;
-      background: uploaddocs.$color-gray-100;
-      position: relative;
-      overflow: hidden;
-
-      &::after {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: -100%;
-        width: 200%;
-        height: 100%;
-        background: linear-gradient(
-          90deg,
-          transparent,
-          rgba(255, 255, 255, 0.5),
-          transparent
-        );
-        animation: loading-shimmer 2s infinite linear;
-      }
-
-      .remove-file-btn {
-        opacity: 0.5;
-        cursor: not-allowed;
-      }
-    }
-
-    // Success state
-    &.success {
-      border-color: uploaddocs.$color-success;
-      background: rgba(76, 175, 80, 0.05);
-
-      .file-name {
-        color: uploaddocs.$color-success;
-      }
-    }
-
-    // Error state
-    &.error {
-      border-color: uploaddocs.$color-danger;
-      background: rgba(244, 67, 54, 0.05);
-
-      .file-name {
-        color: uploaddocs.$color-danger;
-      }
-    }
-
-    .file-info {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      gap: 0.25rem;
-      
-      .file-name {
+      .uploaded-files-list-title {
         font-size: uploaddocs.$font-size-sm;
-        color: uploaddocs.$color-gray-900;
-        font-weight: uploaddocs.$font-weight-medium;
-        transition: color 0.3s ease;
+        margin-bottom: 1rem;
       }
 
-      .file-size {
-        font-size: uploaddocs.$font-size-xs;
-        color: uploaddocs.$color-gray-600;
-      }
-    }
+      .file-progress-item {
+        padding: 0.5rem 0.65rem;
 
-    .remove-file-btn {
-      background: none;
-      border: none;
-      color: uploaddocs.$color-gray-600;
-      font-size: 1.2rem;
-      cursor: pointer;
-      padding: 0.25rem;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: all 0.2s;
+        .file-info {
+          gap: 0.15rem;
+          
+          .file-name {
+            font-size: uploaddocs.$font-size-xs;
+          }
 
-      &:hover {
-        color: uploaddocs.$color-danger;
-      }
+          .file-size {
+            font-size: calc(#{uploaddocs.$font-size-xs} - 1px);
+          }
+        }
 
-      &:disabled {
-        opacity: 0.5;
-        cursor: not-allowed;
-        
-        &:hover {
-          color: uploaddocs.$color-gray-600;
+        .file-actions {
+          gap: 0.25rem;
+          margin-left: 0.5rem;
+          
+          .status-icon {
+            font-size: 0.9rem;
+          }
+
+          .remove-file-btn {
+            font-size: 0.9rem;
+            padding: 0.15rem;
+          }
         }
       }
     }

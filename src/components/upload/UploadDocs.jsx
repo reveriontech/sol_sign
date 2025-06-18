@@ -55,7 +55,8 @@ const UploadDocs = () => {
     }
   }, [selectedFiles, currentProcessingIndex]);
 
-  const handleFileChange = (e) => {
+  // For handling file changes
+    const handleFileChange = (e) => {
     const files = e.target.files;
     if (files) {
       addFiles(files);
@@ -63,6 +64,7 @@ const UploadDocs = () => {
     }
   };
 
+  // For adding files
   const addFiles = (files) => {
     const pdfFiles = Array.from(files).filter(file => file.type === 'application/pdf');
     if (pdfFiles.length > 0) {
@@ -70,6 +72,7 @@ const UploadDocs = () => {
     }
   };
 
+  // For removing files
   const removeFile = (index) => {
     const removedFile = selectedFiles[index];
     const newFiles = [...selectedFiles];

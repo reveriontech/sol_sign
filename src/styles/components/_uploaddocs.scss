@@ -297,6 +297,26 @@ $desktop: 1024px;
 
 .box-content-body.left {
   flex: 1 1 0;
+  cursor: pointer;
+  transition: all 0.3s ease;
+
+  &.drag-over {
+    background: uploaddocs.$color-gray-200;
+    border: 2px dashed uploaddocs.$color-primary;
+    transform: scale(0.99);
+
+    .logo-picture {
+      transform: scale(1.1);
+    }
+
+    h2, .subtext {
+      color: uploaddocs.$color-primary;
+    }
+  }
+
+  .logo-picture {
+    transition: transform 0.3s ease;
+  }
 }
 
 .file-info-box-container {

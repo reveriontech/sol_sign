@@ -9,7 +9,8 @@
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "docusign": "concurrently \"npm run engine\" \"npm run dev\""
+    "docusign": "concurrently \"npm run engine\" \"npm run dev\"",
+    "solsign": "concurrently \"npm run engine\" \"serve -s dist -l 4000\""
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.50.0",

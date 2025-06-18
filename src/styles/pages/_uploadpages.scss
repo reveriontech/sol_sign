@@ -8,8 +8,10 @@ $desktop: 1024px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    height: 100vh;
+    min-height: 100vh;
     width: 100%;
     margin-top: 5rem;
+    padding-bottom: 2rem;
+    overflow-y: auto;
 }
 

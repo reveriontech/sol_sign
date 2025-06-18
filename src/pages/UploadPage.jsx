@@ -1,10 +1,16 @@
 import React from 'react'
+import '../styles/pages/_uploadpages.scss'
+
+// Components
+import UploadDocs from '../components/upload/UploadDocs'
 
 const UploadPage = () => {
   return (
-    <section className='upload-container'>
-      <h1>Upload Page</h1>
-    </section>
+    <>
+      <section className='upload-container'>
+        <UploadDocs />
+      </section>
+    </>
   )
 }
 

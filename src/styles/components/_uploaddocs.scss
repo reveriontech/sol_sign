@@ -1,0 +1,206 @@
+@use "../utils/variables" as uploaddocs;
+
+$mobile: 360px;
+$tablet: 768px;
+$desktop: 1024px;
+
+.upload-docs-container {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 3rem;
+
+  .upload-box-container {
+    border: 1px solid uploaddocs.$color-gray-400;
+    background-color: uploaddocs.$color-white;
+    border-radius: 0.6rem;
+    width: 100%;
+    max-width: 800px;
+    min-height: 50vh;
+    display: flex;
+    flex-direction: column;
+
+    .upload-box-header {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: center;
+      margin-bottom: 2rem;
+      padding: 1.5rem;
+
+      h1 {
+        font-size: uploaddocs.$font-size-2xl;
+        font-weight: uploaddocs.$font-weight-bold;
+        color: uploaddocs.$color-gray-900;
+      }
+
+      p {
+        font-size: uploaddocs.$font-size-sm;
+        font-weight: uploaddocs.$font-weight-normal;
+        color: uploaddocs.$color-gray-900;
+      }
+
+      hr {
+        width: 100%;
+        height: 1px;
+        background-color: uploaddocs.$color-gray-400;
+        margin-top: 1.2rem;
+      }
+    }
+
+    // Upload Box Content
+    .upload-box-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 3rem;
+      flex: 1;
+
+      .box-content-body {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+        max-width: 400px;
+        background: uploaddocs.$color-gray-100;
+        border: 1px solid uploaddocs.$color-gray-400;
+        border-radius: 2px;
+        padding: 2rem 1.5rem 1.5rem 1.5rem;
+        margin: 0 auto;
+
+        .logo-picture {
+          width: 60px;
+          height: 60px;
+          margin-bottom: 1.2rem;
+          object-fit: contain;
+          padding: 0.5rem;
+          background: #fff;
+          border-radius: 0.5rem;
+          box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+
+        h2 {
+          font-size: uploaddocs.$font-size-lg;
+          font-weight: uploaddocs.$font-weight-bold;
+          color: uploaddocs.$color-black;
+          margin-bottom: 0.5rem;
+          text-align: center;
+        }
+
+        .subtext {
+          font-size: uploaddocs.$font-size-sm;
+          color: uploaddocs.$color-gray-600;
+          margin-bottom: 1.5rem;
+          text-align: center;
+        }
+
+        .select-file-btn {
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+          background: uploaddocs.$color-white;
+          border: 1px solid uploaddocs.$color-gray-400;
+          border-radius: 0.5rem;
+          padding: 0.6rem 1.2rem;
+          font-size: uploaddocs.$font-size-base;
+          font-weight: uploaddocs.$font-weight-medium;
+          color: uploaddocs.$color-black;
+          cursor: pointer;
+          margin-bottom: 1.2rem;
+          transition: background 0.2s, border 0.2s;
+          transform: scale(0.8);
+
+          &:hover {
+            background: uploaddocs.$color-gray-200;
+            border-color: uploaddocs.$color-primary;
+          }
+
+          .btn-logo {
+            width: 24px;
+            height: 24px;
+          }
+
+          .file-input {
+            display: none;
+          }
+        }
+
+        .support-note {
+          font-size: uploaddocs.$font-size-xs;
+          color: uploaddocs.$color-gray-600;
+          margin-top: 0.5rem;
+          text-align: center;
+        }
+      }
+    }
+  }
+}
+
+// Responsive styles
+@media (max-width: 1024px) {
+  .upload-docs-container {
+    margin-top: 2rem;
+    .upload-box-container {
+      max-width: 95vw;
+      min-height: 60vh;
+      .upload-box-header {
+        padding: 1rem;
+        h1 {
+          font-size: uploaddocs.$font-size-xl;
+        }
+      }
+      .upload-box-content {
+        margin-bottom: 2rem;
+        .box-content-body {
+          max-width: 90vw;
+          padding: 1.2rem 0.5rem 1rem 0.5rem;
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 640px) {
+  .upload-docs-container {
+    margin-top: 1rem;
+    .upload-box-container {
+      max-width: 100vw;
+      min-height: 70vw;
+      border-radius: 0.3rem;
+      .upload-box-header {
+        padding: 0.7rem;
+        h1 {
+          font-size: uploaddocs.$font-size-lg;
+        }
+        p {
+          font-size: uploaddocs.$font-size-xs;
+        }
+      }
+      .upload-box-content {
+        margin-bottom: 1rem;
+        .box-content-body {
+          max-width: 98vw;
+          padding: 0.7rem 0.2rem 0.7rem 0.2rem;
+          .logo-picture {
+            width: 40px;
+            height: 40px;
+          }
+          h2 {
+            font-size: uploaddocs.$font-size-base;
+          }
+          .select-file-btn {
+            font-size: uploaddocs.$font-size-sm;
+            padding: 0.4rem 0.7rem;
+            .btn-logo {
+              width: 18px;
+              height: 18px;
+            }
+          }
+        }
+      }
+    }
+  }
+}

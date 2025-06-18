@@ -25,7 +25,6 @@ const AppRoutes = () => {
             <Route path="/" element={<AccessProvider><Intro /></AccessProvider>} />
 
               <Route element={<HomeProvider><Home /></HomeProvider>}>
-                <Route index element={<Landing />} />
                 <Route path="/landing" element={<Landing />}/>
                 <Route path="/upload" element={<UploadPage />}/>
               </Route>

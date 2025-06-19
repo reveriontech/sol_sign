@@ -51,7 +51,7 @@ const Nav = () => {
                             src={userDetails?.picture || profile} 
                             alt="Profile" 
                         />
-                        <p>{user?.email?.split('@')[0]}</p>
+                        <p>{userDetails?.username?.split('@')[0]}</p>
                     </div>
                     <button className="logout-btn" onClick={handleSignOut}>
                         <IoIosLogOut size={24}/>

@@ -6,6 +6,7 @@ import { Session } from '../routes/SessionProvider'
 import { IoIosLogOut } from "react-icons/io";
 import { HiMenu } from "react-icons/hi";
 import { IoMdClose } from "react-icons/io";
+import SignOutFunctions from '../functions/SIgnOutFunctions'
 
 const Nav = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -18,14 +19,13 @@ const Nav = () => {
         setUserDetails
     } = Session()
 
+    const {
+        isSigningOut,
+        handleSignOut
+    } = SignOutFunctions()
+
     const toggleMenu = () => {
         setIsMenuOpen(!isMenuOpen);
-    };
-
-    const handleLogout = () => {
-        // Add your logout logic here
-        setUser(null);
-        setUserDetails(null);
     };
 
     return (
@@ -52,9 +52,9 @@ const Nav = () => {
                         />
                         <p>{user?.email?.split('@')[0]}</p>
                     </div>
-                    <button className="logout-btn" onClick={handleLogout}>
+                    <button className="logout-btn" onClick={handleSignOut}>
                         <IoIosLogOut size={24}/>
-                        <span className="logout-text">Logout</span>
+                        <span className="logout-text">{isSigningOut ? "Signing Out" : "Sign Out"}</span>
                     </button>
                 </div>
             </div>

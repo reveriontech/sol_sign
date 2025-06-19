@@ -12,9 +12,11 @@ export default defineConfig({
   },
   server :{
 		port: 4000,
+    host: true,
 		watch: {
 		usePolling: true,
 		interval: 30,
 		},
+    allowedHosts: 'all'
 	}
 })

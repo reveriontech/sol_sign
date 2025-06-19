@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import logo from '../assets/images/solvistalogo.png'
+import profile from '../assets/images/solvistaicon.png'
 import '../styles/pages/_nav.scss'
 import { Link } from 'react-router-dom'
 import { Session } from '../routes/SessionProvider'
@@ -47,7 +48,7 @@ const Nav = () => {
                     <div className="profile-info">
                         <img 
                             className="profile-image" 
-                            src={userDetails?.picture || logo} 
+                            src={userDetails?.picture || profile} 
                             alt="Profile" 
                         />
                         <p>{user?.email?.split('@')[0]}</p>

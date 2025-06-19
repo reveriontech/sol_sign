@@ -139,7 +139,7 @@ const UploadDocs = () => {
       return <AiOutlineLoading3Quarters className="status-icon loading" />;
     }
     if (fileStatuses[fileName] === "success") {
-      return <BsCheckCircleFill className="status-icon success" />; 
+      return <BsCheckCircleFill className="status-icon success" />;
     }
     if (fileStatuses[fileName] === "error") {
       return <BsXCircleFill className="status-icon error" />;
@@ -188,6 +188,7 @@ const UploadDocs = () => {
 
         {selectedFiles.length > 0 && (
           <div className="file-info-box-container">
+            <hr className="file-info-box-hr" />
             <p className="uploaded-files-list-title">Uploaded Files</p>
             <div className="uploaded-files-list">
               {selectedFiles.map((file, index) => (

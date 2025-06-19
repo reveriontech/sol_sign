@@ -48,7 +48,7 @@ const Nav = () => {
                     <div className="profile-info">
                         <img 
                             className="profile-image" 
-                            src={userDetails?.picture || profile} 
+                            src={user?.session?.user_metadata?.avatar_url || userDetails?.picture || profile} 
                             alt="Profile" 
                         />
                         <p>{userDetails?.username?.split('@')[0]}</p>

@@ -18,9 +18,12 @@ export const session = async (req, res) => {
             return res.status(401).json({ error: 'User details not found.', success: false })
         }
 
+        const avatar = session?.user_metadata?.avatar_url || null
+
         return res.status(200).json({
             success: true,
             data: {
+                avatar,
                 session,
                 userDetails
             }

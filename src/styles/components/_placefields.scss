@@ -467,32 +467,30 @@ $large-desktop: 1440px;
   width: 95vw;
   height: 95vh;
   background-color: placefields.$color-white;
-  border-radius: 0.5rem;
   overflow: hidden;
 }
 
 .editor-sidebar {
   width: 300px;
   flex-shrink: 0;
-  background: linear-gradient(135deg, #f7fafc 80%, #e3e9f6 100%);
+  background: placefields.$color-gray-900;
   padding: 2rem 1.5rem 1.5rem 1.5rem;
   display: flex;
   flex-direction: column;
   gap: 2rem;
   overflow-y: auto;
   border-right: 1px solid placefields.$color-gray-200;
-  box-shadow: 2px 0 16px 0 rgba(60, 80, 120, 0.07);
-  border-radius: 1.2rem 0 0 1.2rem;
 
   .sidebar-title {
     font-size: placefields.$font-size-xl;
     font-weight: placefields.$font-weight-bold;
-    color: placefields.$color-gray-900;
+    color: placefields.$color-gray-200;
     margin-bottom: 0.5rem;
   }
 
   hr {
     border: none;
+    color: placefields.$color-gray-300;
     border-top: 1px solid placefields.$color-gray-300;
     margin: 0.5rem 0 1rem 0;
   }
@@ -539,7 +537,7 @@ $large-desktop: 1440px;
     .recipient-btn {
       padding: 0.75rem 1rem;
       border: 1px solid placefields.$color-gray-300;
-      border-radius: 9999px;
+      border-radius: 0.2rem;    
       background-color: placefields.$color-white;
       color: placefields.$color-gray-900;
       cursor: pointer;
@@ -579,11 +577,11 @@ $large-desktop: 1440px;
     color: white;
     border: none;
     border-radius: 0.8rem;
+    transform: scale(0.8);
     cursor: pointer;
     font-size: 1.1rem;
     font-weight: bold;
     box-shadow: 0 2px 8px rgba(33, 150, 243, 0.08);
-    margin-bottom: 0.5rem;
     transition: background 0.2s, box-shadow 0.2s, transform 0.15s;
 
     &:hover {
@@ -603,8 +601,8 @@ $large-desktop: 1440px;
     border-radius: 0.8rem;
     box-shadow: 0 1px 4px rgba(0,0,0,0.04);
     font-size: 1.05rem;
-    margin-bottom: 0.2rem;
     transition: background 0.18s, color 0.18s;
+    transform: scale(0.8);
 
     &:hover, &:active {
       background: #e5e7eb;

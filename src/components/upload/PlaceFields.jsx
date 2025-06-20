@@ -44,7 +44,6 @@ const PlaceFields = () => {
 
   // Refs
   const pdfWrapperRef = useRef(null);
-  const hiddenFileInput = useRef(null);
   const currentDocument = documentUrls[currentDocumentIndex];
   const currentDocumentUrl = currentDocument ? currentDocument.url : null;
 
@@ -69,20 +68,6 @@ const PlaceFields = () => {
   };
 
   // Handlers
-  const handleTriggerUpload = () => {
-    hiddenFileInput.current.click();
-  };
-
-  const handleFileChange = (e) => {
-    const files = Array.from(e.target.files).filter(
-      (file) => file.type === "application/pdf"
-    );
-    if (files.length > 0) {
-      dispatch(addFiles(files));
-    }
-    e.target.value = "";
-  };
-
   const handleFieldTypeDragStart = (e, fieldType) => {
     if (recipients.length === 0) {
       alert("Please add at least one recipient first.");
@@ -190,13 +175,21 @@ const PlaceFields = () => {
     setIsModalOpen(false);
   };
 
+  const handleDocumentChange = (newIndex) => {
+    if (newIndex >= 0 && newIndex < documentUrls.length) {
+      dispatch(setCurrentDocumentIndex(newIndex));
+      setPageNumber(1);
+      setNumPages(null);
+    }
+  };
+
   return (
     <>
       <section className="placefields-container">
         <div className="placefields-box-container">
           <div className="placefields-box-header">
-            <h1>Place Fields</h1>
-          </div>
+                <h1>Place Fields</h1>
+            </div>
 
           <div className="placefields-box-content">
             {currentDocumentUrl ? (
@@ -222,20 +215,6 @@ const PlaceFields = () => {
               <div className="no-pdf-message">
                 <h2>Document preview will appear here</h2>
                 <p>Upload a document to start placing fields</p>
-                <button
-                  onClick={handleTriggerUpload}
-                  className="upload-link-btn"
-                >
-                  Click here
-                </button>
-                <input
-                  type="file"
-                  ref={hiddenFileInput}
-                  onChange={handleFileChange}
-                  style={{ display: "none" }}
-                  accept="application/pdf"
-                  multiple
-                />
               </div>
             )}
 
@@ -364,25 +343,46 @@ const PlaceFields = () => {
                   </Document>
                 </div>
               )}
-              {numPages && numPages > 1 && (
-                <div className="page-navigation">
-                  <button
-                    disabled={pageNumber <= 1}
-                    onClick={() => setPageNumber(pageNumber - 1)}
-                  >
-                    ‹
-                  </button>
-                  <span>
-                    Page {pageNumber} of {numPages}
-                  </span>
-                  <button
-                    disabled={pageNumber >= numPages}
-                    onClick={() => setPageNumber(pageNumber + 1)}
-                  >
-                    ›
-                  </button>
-                </div>
-              )}
+              <div className="navigation-controls-container">
+                {documentUrls.length > 1 && (
+                  <div className="document-navigation">
+                    <button
+                      disabled={currentDocumentIndex <= 0}
+                      onClick={() => handleDocumentChange(currentDocumentIndex - 1)}
+                    >
+                      ‹
+                    </button>
+                    <span>
+                      Document {currentDocumentIndex + 1} of {documentUrls.length}
+                    </span>
+                    <button
+                      disabled={currentDocumentIndex >= documentUrls.length - 1}
+                      onClick={() => handleDocumentChange(currentDocumentIndex + 1)}
+                    >
+                      ›
+                    </button>
+                  </div>
+                )}
+                {numPages && numPages > 1 && (
+                  <div className="page-navigation">
+                    <button
+                      disabled={pageNumber <= 1}
+                      onClick={() => setPageNumber(pageNumber - 1)}
+                    >
+                      ‹
+                    </button>
+                    <span>
+                      Page {pageNumber} of {numPages}
+                    </span>
+                    <button
+                      disabled={pageNumber >= numPages}
+                      onClick={() => setPageNumber(pageNumber + 1)}
+                    >
+                      ›
+                    </button>
+                  </div>
+                )}
+              </div>
             </main>
             <div className="sidebar-actions-mobile">
               <button
@@ -394,8 +394,8 @@ const PlaceFields = () => {
               <button className="cancel-modal-btn" onClick={handleCancel}>
                 Cancel
               </button>
+                </div>
             </div>
-          </div>
         </div>
       )}
     </>

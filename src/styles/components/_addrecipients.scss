@@ -52,14 +52,15 @@ $large-desktop: 1440px;
     }
 
     .addrecipients-box-content {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      gap: 1rem;
       justify-content: center;
       margin-top: -2rem;
       padding: 1rem;
 
       .add-recipients-form {
+        grid-column: 2;
         display: flex;
         flex-direction: row;
         align-items: flex-start;
@@ -143,7 +144,9 @@ $large-desktop: 1440px;
       }
 
       .add-recipient-btn {
-        width: 20%;
+        grid-column: 2;
+        justify-self: start;
+        width: 25%;
         padding: 0.5rem;
         border: 1px solid addrecipients.$color-gray-400;
         background-color: addrecipients.$color-blue-50;
@@ -152,8 +155,6 @@ $large-desktop: 1440px;
         cursor: pointer;
         transition: background-color 0.2s ease;
         margin-top: 1rem;
-        align-self: flex-start;
-        margin-left: 4.2rem;
 
         &:hover {
           background-color: addrecipients.$color-accent-dark;
@@ -161,6 +162,7 @@ $large-desktop: 1440px;
       }
 
       hr {
+        grid-column: 1 / -1;
         width: 98.2%;
         height: 1px;
         margin-top: 2rem;
@@ -169,6 +171,7 @@ $large-desktop: 1440px;
 
       // Recipients List
       .recipients-list-container {
+        grid-column: 2;
         display: flex;
         flex-direction: column;
         margin-top: 1rem;
@@ -342,8 +345,13 @@ $large-desktop: 1440px;
         }
       }
       .addrecipients-box-content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
         padding: 0.5rem;
+
         .add-recipients-form {
+          grid-column: auto;
           flex-direction: column;
           gap: 0.5rem;
           div {
@@ -352,10 +360,17 @@ $large-desktop: 1440px;
           }
         }
         .add-recipient-btn {
+          grid-column: auto;
+          justify-self: auto;
           width: 100%;
-          margin-left: 0;
         }
+
+        hr {
+          grid-column: auto;
+        }
+
         .recipients-list-container {
+          grid-column: auto;
           .recipients-list {
             min-width: 0;
             width: 100%;

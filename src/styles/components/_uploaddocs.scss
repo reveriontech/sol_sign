@@ -228,6 +228,12 @@ $large-desktop: 1440px;
           font-size: uploaddocs.$font-size-xs;
           color: uploaddocs.$color-gray-600;
         }
+
+        .file-error-message {
+          font-size: uploaddocs.$font-size-xs;
+          color: uploaddocs.$color-danger;
+          font-weight: uploaddocs.$font-weight-medium;
+        }
       }
 
       .file-actions {

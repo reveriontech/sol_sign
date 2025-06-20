@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState } from "react";
+import React, { useRef, useEffect, useState, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import "@/styles/components/_uploaddocs.scss";
 import logoPicture from "@/assets/images/pdf-logo.png";
@@ -13,6 +13,10 @@ import {
   clearAllDocuments,
 } from "@/store/slices/documentSlice";
 
+const MAX_FILES = 10;
+const MAX_FILE_SIZE_MB = 20;
+const MAX_FILE_SIZE_BYTES = MAX_FILE_SIZE_MB * 1024 * 1024;
+
 const UploadDocs = () => {
   const dispatch = useDispatch();
   const { selectedFiles, loadingFiles, fileStatuses } = useSelector(
@@ -22,15 +26,35 @@ const UploadDocs = () => {
   const fileInputRef = useRef(null);
   const dropZoneRef = useRef(null);
   const [filesToProcess, setFilesToProcess] = useState([]);
+  const [fileErrors, setFileErrors] = useState({});
+  const [isProcessing, setIsProcessing] = useState(false);
 
-  const validateAndProcessFile = (file) => {
-    if (fileStatuses[file.name] !== undefined) return;
+  const validateAndProcessFile = useCallback(
+    async (file) => {
+      if (
+        fileStatuses[file.name] !== undefined &&
+        fileStatuses[file.name] !== "loading"
+      )
+        return;
 
-    dispatch(setLoadingFile({ fileName: file.name, isLoading: true }));
+      dispatch(setLoadingFile({ fileName: file.name, isLoading: true }));
+      dispatch(setFileStatus({ fileName: file.name, status: "loading" }));
 
-    // Simulate validation
-    setTimeout(() => {
-      const isValid = file.size <= 20 * 1024 * 1024; // 20MB limit
+      // File size validation
+      if (file.size > MAX_FILE_SIZE_BYTES) {
+        dispatch(setFileStatus({ fileName: file.name, status: "error" }));
+        setFileErrors((prev) => ({
+          ...prev,
+          [file.name]: `File exceeds ${MAX_FILE_SIZE_MB}MB limit.`,
+        }));
+        dispatch(setLoadingFile({ fileName: file.name, isLoading: false }));
+        return;
+      }
+
+      // Simulate processing
+      await new Promise((resolve) => setTimeout(resolve, 1500));
+
+      const isValid = true; // Assuming other validations pass
       const status = isValid ? "success" : "error";
       dispatch(setFileStatus({ fileName: file.name, status }));
 
@@ -40,28 +64,22 @@ const UploadDocs = () => {
       }
 
       dispatch(setLoadingFile({ fileName: file.name, isLoading: false }));
-    }, 1500); // Fake delay
-  };
+    },
+    [dispatch, fileStatuses]
+  );
 
   useEffect(() => {
-    // Whenever selectedFiles changes, find the new files and process them.
-    const newFiles = selectedFiles.filter(
-      (file) => fileStatuses[file.name] === undefined
-    );
-    if (newFiles.length > 0) {
-      setFilesToProcess(newFiles);
+    if (filesToProcess.length > 0 && !isProcessing) {
+      setIsProcessing(true);
+      const process = async () => {
+        const fileToProcess = filesToProcess[0];
+        await validateAndProcessFile(fileToProcess);
+        setFilesToProcess((prev) => prev.slice(1));
+        setIsProcessing(false);
+      };
+      process();
     }
-  }, [selectedFiles, fileStatuses]);
-
-  useEffect(() => {
-    // Process files one by one from the queue
-    if (filesToProcess.length > 0) {
-      const fileToProcess = filesToProcess[0];
-      validateAndProcessFile(fileToProcess);
-      setFilesToProcess((prev) => prev.slice(1)); // Remove the processed file from queue
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [filesToProcess, validateAndProcessFile]);
+  }, [filesToProcess, isProcessing, validateAndProcessFile]);
 
   const handleFileChange = (e) => {
     const files = e.target.files;
@@ -72,18 +90,49 @@ const UploadDocs = () => {
   };
 
   const addFilesToStore = (files) => {
-    const pdfFiles = files.filter((file) => file.type === "application/pdf");
-    if (pdfFiles.length > 0) {
-      const serializableFiles = pdfFiles.map((file) => ({
+    const currentFileCount = selectedFiles.length;
+    if (currentFileCount >= MAX_FILES) {
+      alert(`You cannot upload more than ${MAX_FILES} documents.`);
+      return;
+    }
+
+    const newPdfFiles = files.filter(
+      (file) =>
+        file.type === "application/pdf" &&
+        !selectedFiles.some((f) => f.name === file.name)
+    );
+
+    const availableSlots = MAX_FILES - currentFileCount;
+    let filesToAdd = newPdfFiles;
+
+    if (newPdfFiles.length > availableSlots) {
+      alert(
+        `You can only add ${availableSlots} more document(s). ${
+          newPdfFiles.length - availableSlots
+        } file(s) were not added.`
+      );
+      filesToAdd = newPdfFiles.slice(0, availableSlots);
+    }
+
+    if (filesToAdd.length > 0) {
+      const serializableFiles = filesToAdd.map((file) => ({
         name: file.name,
         size: file.size,
       }));
       dispatch(addFiles(serializableFiles));
-      setFilesToProcess((prev) => [...prev, ...pdfFiles]);
+      setFilesToProcess((prev) => [...prev, ...filesToAdd]);
     }
   };
 
   const removeFileFromStore = (index) => {
+    const fileToRemove = selectedFiles[index];
+    if (fileToRemove) {
+      setFileErrors((prev) => {
+        const newErrors = { ...prev };
+        delete newErrors[fileToRemove.name];
+        return newErrors;
+      });
+    }
     dispatch(removeFile(index));
   };
 
@@ -190,8 +239,13 @@ const UploadDocs = () => {
                   <div className="file-info">
                     <span className="file-name">{file.name}</span>
                     <span className="file-size">
-                      {(file.size / 1024).toFixed(2)} mb
+                      {(file.size / (1024 * 1024)).toFixed(2)} MB
                     </span>
+                    {fileErrors[file.name] && (
+                      <span className="file-error-message">
+                        {fileErrors[file.name]}
+                      </span>
+                    )}
                   </div>
                   <div className="file-actions">
                     {getStatusIcon(file.name)}

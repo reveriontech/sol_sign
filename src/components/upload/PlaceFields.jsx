@@ -195,8 +195,8 @@ const PlaceFields = () => {
       <section className="placefields-container">
         <div className="placefields-box-container">
           <div className="placefields-box-header">
-                <h1>Place Fields</h1>
-            </div>
+            <h1>Place Fields</h1>
+          </div>
 
           <div className="placefields-box-content">
             {currentDocumentUrl ? (
@@ -394,8 +394,8 @@ const PlaceFields = () => {
               <button className="cancel-modal-btn" onClick={handleCancel}>
                 Cancel
               </button>
-                </div>
             </div>
+          </div>
         </div>
       )}
     </>

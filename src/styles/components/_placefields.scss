@@ -1,0 +1,426 @@
+@use "../utils/variables" as placefields;
+
+// Breakpoints
+$mobile: 360px;
+$tablet: 768px;
+$small-desktop: 1024px;
+$medium-desktop: 1280px;
+$large-desktop: 1440px;
+
+.placefields-container {
+  width: 100%;
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  background-color: placefields.$color-gray-700;
+  align-items: center;
+  gap: 2rem;
+  padding: 1rem;
+  overflow-y: auto;
+  margin-bottom: 2rem;
+
+  .placefields-box-container {
+    border: 1px solid placefields.$color-gray-400;
+    background-color: placefields.$color-white;
+    border-radius: 0.6rem;
+    width: 100%;
+    max-width: 800px;
+    min-height: auto;
+
+    .placefields-box-header {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1rem;
+      padding: 1.5rem 1.5rem 0 1.5rem;
+
+      .header-step {
+        background-color: #4a4a4a;
+        color: placefields.$color-white;
+        border-radius: 50%;
+        width: 24px;
+        height: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1rem;
+        font-weight: placefields.$font-weight-bold;
+      }
+
+      h1 {
+        font-size: placefields.$font-size-2xl;
+        font-weight: placefields.$font-weight-bold;
+        color: placefields.$color-gray-900;
+      }
+
+      hr {
+        display: none;
+      }
+    }
+
+    .placefields-box-content {
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+
+      .field-types-container {
+        display: flex;
+        gap: 1rem;
+        flex-wrap: wrap;
+        padding-bottom: 1.5rem;
+        border-bottom: 1px solid placefields.$color-gray-300;
+
+        .field-type-btn {
+          padding: 0.5rem 1rem;
+          border: 1px solid placefields.$color-gray-400;
+          border-radius: 0.375rem;
+          background-color: placefields.$color-white;
+          color: placefields.$color-gray-900;
+          cursor: grab;
+          transition: all 0.2s ease;
+
+          &:hover {
+            border-color: placefields.$color-gray-900;
+            background-color: placefields.$color-gray-100;
+          }
+
+          &:active {
+            cursor: grabbing;
+            background-color: placefields.$color-gray-200;
+          }
+        }
+      }
+
+      .recipient-selection-container {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        flex-wrap: wrap;
+
+        .recipient-label {
+          font-weight: placefields.$font-weight-medium;
+          color: placefields.$color-gray-700;
+        }
+
+        .recipient-btn {
+          padding: 0.5rem 1rem;
+          border: 1px solid transparent;
+          border-radius: 9999px;
+          background-color: placefields.$color-gray-100;
+          color: placefields.$color-gray-900;
+          cursor: pointer;
+
+          &.active {
+            background-color: #333;
+            color: placefields.$color-white;
+            font-weight: placefields.$font-weight-bold;
+          }
+        }
+      }
+
+      .doc-preview-container {
+        position: relative;
+        width: 100%;
+        height: 450px;
+        background-color: placefields.$color-gray-200;
+        border-radius: 0.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+
+        .doc-preview-iframe {
+          width: 100%;
+          height: 100%;
+          border: none;
+          pointer-events: none;
+          transform: scale(0.95);
+        }
+
+        .open-editor-btn {
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          padding: 0.75rem 1.5rem;
+          background-color: rgba(0, 0, 0, 0.6);
+          color: placefields.$color-white;
+          border: none;
+          border-radius: 0.375rem;
+          cursor: pointer;
+          font-weight: placefields.$font-weight-bold;
+          opacity: 0;
+          transition: opacity 0.2s ease;
+        }
+
+        &:hover .open-editor-btn {
+          opacity: 1;
+        }
+      }
+
+      .pagination-controls {
+        display: flex;
+        justify-content: center;
+        gap: 0.5rem;
+        padding-top: 1rem;
+        border-top: 1px solid placefields.$color-gray-300;
+
+        .page-btn {
+          width: 32px;
+          height: 32px;
+          border-radius: 50%;
+          border: 1px solid placefields.$color-gray-400;
+          background-color: placefields.$color-white;
+          cursor: pointer;
+
+          &.active {
+            background-color: #4a4a4a;
+            color: placefields.$color-white;
+            border-color: #4a4a4a;
+          }
+        }
+      }
+
+      .pdf-container-wrapper {
+        display: none;
+      }
+
+      .no-pdf-message {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        min-height: 450px;
+        border: 1px solid placefields.$color-gray-300;
+        border-radius: 0.5rem;
+        background-color: placefields.$color-gray-100;
+        text-align: center;
+
+        h2 {
+          font-size: 1.25rem;
+          color: placefields.$color-gray-900;
+          margin-bottom: 0.5rem;
+        }
+
+        p {
+          color: placefields.$color-gray-600;
+          font-size: 1rem;
+          margin-bottom: 1rem;
+        }
+
+        .upload-link-btn {
+          color: #007bff;
+          background: none;
+          border: none;
+          padding: 0;
+          font-size: 1rem;
+          text-decoration: underline;
+          cursor: pointer;
+        }
+      }
+    }
+  }
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+// Responsive design
+@media (max-width: $tablet) {
+  .placefields-container {
+    .placefields-box-container {
+      .placefields-box-content {
+        .placefields-box-content-header {
+          .field-types-container {
+            justify-content: center;
+          }
+        }
+
+        .recipient-selection-container {
+          .recipients-grid {
+            justify-content: center;
+          }
+        }
+
+        .doc-preview-container {
+          .doc-preview-iframe {
+            height: 400px;
+          }
+        }
+      }
+    }
+  }
+}
+
+// Modal Editor Styles
+.editor-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.editor-modal-content {
+  display: flex;
+  width: 95vw;
+  height: 95vh;
+  background-color: placefields.$color-white;
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
+
+.editor-sidebar {
+  width: 280px;
+  background-color: placefields.$color-white;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  overflow-y: auto;
+  border-right: 1px solid placefields.$color-gray-300;
+
+  .sidebar-title {
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: placefields.$color-gray-900;
+  }
+
+  hr {
+    border: none;
+    border-top: 1px solid placefields.$color-gray-300;
+    margin: 0;
+  }
+
+  .field-types-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+  }
+
+  .recipient-selection-container {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .close-modal-btn {
+    margin-top: auto;
+    width: 100%;
+    padding: 0.75rem;
+    background-color: #4a4a4a;
+    color: white;
+    border: none;
+    border-radius: 0.375rem;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: bold;
+  }
+
+  .cancel-modal-btn {
+    margin-top: auto;
+    width: 100%;
+    padding: 0.75rem;
+    background-color: placefields.$color-gray-100;
+    color: placefields.$color-gray-900;
+    border: none;
+    border-radius: 0.375rem;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: bold;
+  }
+}
+
+.editor-main {
+  flex: 1;
+  position: relative;
+  overflow: auto;
+  background-color: placefields.$color-gray-100;
+
+  .pdf-iframe-full {
+    width: 100%;
+    height: 100%;
+    border: none;
+    pointer-events: none;
+  }
+
+  .drop-overlay {
+    display: none;
+  }
+
+  .field-overlay {
+    position: absolute;
+    border: 2px solid #4a4a4a;
+    background-color: rgba(74, 74, 74, 0.3);
+    border-radius: 0.25rem;
+    cursor: move;
+    color: #4a4a4a;
+    font-size: 0.8rem;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 20;
+
+    .field-content {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.3rem;
+      padding: 0 0.5rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+
+      .field-type-label {
+        font-weight: bold;
+        text-transform: capitalize;
+      }
+
+      .field-recipient-label {
+        font-weight: normal;
+      }
+
+      input[type="checkbox"] {
+        width: 16px;
+        height: 16px;
+      }
+    }
+
+    .remove-field-btn {
+      position: absolute;
+      top: -10px;
+      right: -10px;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background-color: placefields.$color-danger;
+      color: placefields.$color-white;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transition: opacity 0.2s ease;
+    }
+
+    &:hover .remove-field-btn {
+      opacity: 1;
+    }
+  }
+}

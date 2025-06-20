@@ -1,101 +1,86 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef, useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import "@/styles/components/_uploaddocs.scss";
 import logoPicture from "@/assets/images/pdf-logo.png";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { BsCheckCircleFill, BsXCircleFill } from "react-icons/bs";
+import {
+  addFiles,
+  removeFile,
+  setLoadingFile,
+  setFileStatus,
+  addDocumentUrl,
+} from "@/store/slices/documentSlice";
 
 const UploadDocs = () => {
-  const [selectedFiles, setSelectedFiles] = useState([]);
-  const [loadingFiles, setLoadingFiles] = useState({});
-  const [fileStatuses, setFileStatuses] = useState({});
-  const [currentProcessingIndex, setCurrentProcessingIndex] = useState(0);
+  const dispatch = useDispatch();
+  const { selectedFiles, loadingFiles, fileStatuses } = useSelector(
+    (state) => state.document
+  );
+
   const fileInputRef = useRef(null);
   const dropZoneRef = useRef(null);
+  const [filesToProcess, setFilesToProcess] = useState([]);
 
-  const validateFile = (file) => {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        const isValid = file.size <= 20 * 1024 * 1024;
-        resolve(isValid);
-      }, 2000);
-    });
+  const validateAndProcessFile = (file) => {
+    if (fileStatuses[file.name] !== undefined) return;
+
+    dispatch(setLoadingFile({ fileName: file.name, isLoading: true }));
+
+    // Simulate validation
+    setTimeout(() => {
+      const isValid = file.size <= 20 * 1024 * 1024; // 20MB limit
+      const status = isValid ? "success" : "error";
+      dispatch(setFileStatus({ fileName: file.name, status }));
+
+      if (isValid) {
+        const fileUrl = URL.createObjectURL(file);
+        dispatch(addDocumentUrl({ file, url: fileUrl }));
+      }
+
+      dispatch(setLoadingFile({ fileName: file.name, isLoading: false }));
+    }, 1500); // Fake delay
   };
 
-  // Sequentially process files
   useEffect(() => {
-    if (currentProcessingIndex >= selectedFiles.length) return;
-    const file = selectedFiles[currentProcessingIndex];
-    if (!file || fileStatuses[file.name] !== undefined) return;
-    setLoadingFiles((prev) => ({ ...prev, [file.name]: true }));
-    validateFile(file)
-      .then((isValid) => {
-        setFileStatuses((prev) => ({
-          ...prev,
-          [file.name]: isValid ? "success" : "error",
-        }));
-      })
-      .catch(() => {
-        setFileStatuses((prev) => ({
-          ...prev,
-          [file.name]: "error",
-        }));
-      })
-      .finally(() => {
-        setLoadingFiles((prev) => ({ ...prev, [file.name]: false }));
-        setCurrentProcessingIndex((idx) => idx + 1);
-      });
-    // Only process one file at a time
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentProcessingIndex, selectedFiles]);
-
-  // Reset processing index if files are removed or added
-  useEffect(() => {
-    if (currentProcessingIndex > selectedFiles.length - 1) {
-      setCurrentProcessingIndex((prev) =>
-        Math.max(0, selectedFiles.length - 1)
-      );
+    // Whenever selectedFiles changes, find the new files and process them.
+    const newFiles = selectedFiles.filter(
+      (file) => fileStatuses[file.name] === undefined
+    );
+    if (newFiles.length > 0) {
+      setFilesToProcess(newFiles);
     }
-  }, [selectedFiles, currentProcessingIndex]);
+  }, [selectedFiles, fileStatuses]);
 
-  // For handling file changes
+  useEffect(() => {
+    // Process files one by one from the queue
+    if (filesToProcess.length > 0) {
+      const fileToProcess = filesToProcess[0];
+      validateAndProcessFile(fileToProcess);
+      setFilesToProcess((prev) => prev.slice(1)); // Remove the processed file from queue
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [filesToProcess]);
+
   const handleFileChange = (e) => {
     const files = e.target.files;
     if (files) {
-      addFiles(files);
+      addFilesToStore(Array.from(files));
       e.target.value = "";
     }
   };
 
-  // For adding files
-  const addFiles = (files) => {
-    const pdfFiles = Array.from(files).filter(
+  const addFilesToStore = (files) => {
+    const pdfFiles = files.filter(
       (file) => file.type === "application/pdf"
     );
     if (pdfFiles.length > 0) {
-      setSelectedFiles((prev) => [...prev, ...pdfFiles]);
+      dispatch(addFiles(pdfFiles));
     }
   };
 
-  // For removing files
-  const removeFile = (index) => {
-    const removedFile = selectedFiles[index];
-    const newFiles = [...selectedFiles];
-    newFiles.splice(index, 1);
-    setSelectedFiles(newFiles);
-    setLoadingFiles((prev) => {
-      const newState = { ...prev };
-      delete newState[removedFile.name];
-      return newState;
-    });
-    setFileStatuses((prev) => {
-      const newState = { ...prev };
-      delete newState[removedFile.name];
-      return newState;
-    });
-    // If removing a file before or at the current processing index, adjust the index
-    if (index <= currentProcessingIndex && currentProcessingIndex > 0) {
-      setCurrentProcessingIndex((idx) => idx - 1);
-    }
+  const removeFileFromStore = (index) => {
+    dispatch(removeFile(index));
   };
 
   // For dragging and dropping files
@@ -116,7 +101,7 @@ const UploadDocs = () => {
     e.stopPropagation();
     dropZoneRef.current.classList.remove("drag-over");
     const droppedFiles = e.dataTransfer.files;
-    addFiles(droppedFiles);
+    addFilesToStore(Array.from(droppedFiles));
   };
 
   // For clicking the drop zone
@@ -208,7 +193,7 @@ const UploadDocs = () => {
                     {getStatusIcon(file.name)}
                     <button
                       className="remove-file-btn"
-                      onClick={() => removeFile(index)}
+                      onClick={() => removeFileFromStore(index)}
                       disabled={loadingFiles[file.name]}
                     >
                       ×

@@ -1,25 +1,39 @@
-import React, { useState } from "react";
+import React from "react";
+import { useDispatch, useSelector } from "react-redux";
 import "@/styles/components/_addrecipients.scss";
+import {
+  setSelectedRole,
+  setIsDropdownOpen,
+  setName,
+  setEmail,
+  setNameTouched,
+  setEmailTouched,
+  setRoleTouched,
+  addRecipient,
+  removeRecipient,
+} from "@/store/slices/recipientsSlice";
 
 const AddRecipients = () => {
-  const [selectedRole, setSelectedRole] = useState("Select Role");
-  const [recipients, setRecipients] = useState([]);
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [nameTouched, setNameTouched] = useState(false);
-  const [emailTouched, setEmailTouched] = useState(false);
-  const [roleTouched, setRoleTouched] = useState(false);
-
-  const roles = ["Signer", "Approver", "CC"];
+  const dispatch = useDispatch();
+  const {
+    recipients,
+    selectedRole,
+    isDropdownOpen,
+    name,
+    email,
+    nameTouched,
+    emailTouched,
+    roleTouched,
+    roles,
+  } = useSelector((state) => state.recipients);
 
   const handleRoleChange = (role) => {
-    setSelectedRole(role);
-    setIsDropdownOpen(false);
+    dispatch(setSelectedRole(role));
+    dispatch(setIsDropdownOpen(false));
   };
 
   const toggleDropdown = () => {
-    setIsDropdownOpen(!isDropdownOpen);
+    dispatch(setIsDropdownOpen(!isDropdownOpen));
   };
 
   // Validation logic
@@ -29,26 +43,26 @@ const AddRecipients = () => {
   const isFormValid = isNameValid && isEmailValid && isRoleValid;
 
   // For Recipients List
-  const addRecipient = (e) => {
+  const handleAddRecipient = (e) => {
     e.preventDefault();
-    setNameTouched(true);
-    setEmailTouched(true);
-    setRoleTouched(true);
+    dispatch(setNameTouched(true));
+    dispatch(setEmailTouched(true));
+    dispatch(setRoleTouched(true));
+    
     if (!isFormValid) return;
-    setRecipients([
-      ...recipients,
-      { id: Date.now(), name, email, role: selectedRole },
-    ]);
-    setName("");
-    setEmail("");
-    setSelectedRole("Select Role");
-    setNameTouched(false);
-    setEmailTouched(false);
-    setRoleTouched(false);
+    
+    const newRecipient = {
+      id: Date.now(),
+      name,
+      email,
+      role: selectedRole,
+    };
+    
+    dispatch(addRecipient(newRecipient));
   };
 
-  const removeRecipient = (id) => {
-    setRecipients(recipients.filter((recipient) => recipient.id !== id));
+  const handleRemoveRecipient = (id) => {
+    dispatch(removeRecipient(id));
   };
 
   return (
@@ -60,7 +74,7 @@ const AddRecipients = () => {
         </div>
 
         <div className="addrecipients-box-content">
-          <form className="add-recipients-form" onSubmit={addRecipient}>
+          <form className="add-recipients-form" onSubmit={handleAddRecipient}>
             {/* Name */}
             <div>
               <label htmlFor="name">Name</label>
@@ -69,8 +83,8 @@ const AddRecipients = () => {
                 id="name"
                 placeholder="Enter name"
                 value={name}
-                onChange={(e) => setName(e.target.value)}
-                onBlur={() => setNameTouched(true)}
+                onChange={(e) => dispatch(setName(e.target.value))}
+                onBlur={() => dispatch(setNameTouched(true))}
                 className={nameTouched && !isNameValid ? "input-error" : ""}
               />
               {nameTouched && !isNameValid && (
@@ -86,8 +100,8 @@ const AddRecipients = () => {
                 id="email"
                 placeholder="Enter email"
                 value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                onBlur={() => setEmailTouched(true)}
+                onChange={(e) => dispatch(setEmail(e.target.value))}
+                onBlur={() => dispatch(setEmailTouched(true))}
                 className={emailTouched && !isEmailValid ? "input-error" : ""}
               />
               {emailTouched && !isEmailValid && (
@@ -103,7 +117,7 @@ const AddRecipients = () => {
                   className="dropdown-header"
                   onClick={() => {
                     toggleDropdown();
-                    setRoleTouched(true);
+                    dispatch(setRoleTouched(true));
                   }}
                 >
                   <span>{selectedRole}</span>
@@ -130,7 +144,7 @@ const AddRecipients = () => {
           </form>
           <button
             className="add-recipient-btn"
-            onClick={addRecipient}
+            onClick={handleAddRecipient}
             type="submit"
             disabled={!isFormValid}
             style={{ opacity: isFormValid ? 1 : 0.6, cursor: isFormValid ? 'pointer' : 'not-allowed' }}
@@ -168,7 +182,7 @@ const AddRecipients = () => {
                     <span className="recipient-role">{recipient.role}</span>
                     <span
                       className="remove-recipient-btn"
-                      onClick={() => removeRecipient(recipient.id)}
+                      onClick={() => handleRemoveRecipient(recipient.id)}
                     >
                       x
                     </span>

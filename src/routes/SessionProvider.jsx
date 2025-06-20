@@ -44,7 +44,7 @@ export const SessionProvider = ({ children }) => {
                     return
                 }
 
-                setUser(result.data)
+                setUser(result.data.session)
                 setUserDetails(result.data.userDetails)
 
                 const { usertype } = result.data.userDetails

@@ -50,6 +50,8 @@ const Nav = () => {
                             className="profile-image" 
                             src={user?.session?.user_metadata?.avatar_url || userDetails?.picture || profile} 
                             alt="Profile" 
+                            referrerPolicy="no-referrer"
+                            crossOrigin="anonymous"
                         />
                         <p>{userDetails?.username?.split('@')[0]}</p>
                     </div>

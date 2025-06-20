@@ -48,16 +48,16 @@ const AddRecipients = () => {
     dispatch(setNameTouched(true));
     dispatch(setEmailTouched(true));
     dispatch(setRoleTouched(true));
-    
+
     if (!isFormValid) return;
-    
+
     const newRecipient = {
       id: Date.now(),
       name,
       email,
       role: selectedRole,
     };
-    
+
     dispatch(addRecipient(newRecipient));
   };
 
@@ -121,7 +121,9 @@ const AddRecipients = () => {
                   }}
                 >
                   <span>{selectedRole}</span>
-                  <span className={`arrow ${isDropdownOpen ? "open" : ""}`}>▼</span>
+                  <span className={`arrow ${isDropdownOpen ? "open" : ""}`}>
+                    ▼
+                  </span>
                 </div>
                 {isDropdownOpen && (
                   <div className="dropdown-content">
@@ -147,7 +149,10 @@ const AddRecipients = () => {
             onClick={handleAddRecipient}
             type="submit"
             disabled={!isFormValid}
-            style={{ opacity: isFormValid ? 1 : 0.6, cursor: isFormValid ? 'pointer' : 'not-allowed' }}
+            style={{
+              opacity: isFormValid ? 1 : 0.6,
+              cursor: isFormValid ? "pointer" : "not-allowed",
+            }}
           >
             Add Recipient
           </button>

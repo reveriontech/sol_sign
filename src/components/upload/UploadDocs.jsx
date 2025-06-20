@@ -10,6 +10,7 @@ import {
   setLoadingFile,
   setFileStatus,
   addDocumentUrl,
+  clearAllDocuments,
 } from "@/store/slices/documentSlice";
 
 const UploadDocs = () => {
@@ -35,7 +36,7 @@ const UploadDocs = () => {
 
       if (isValid) {
         const fileUrl = URL.createObjectURL(file);
-        dispatch(addDocumentUrl({ file, url: fileUrl }));
+        dispatch(addDocumentUrl({ name: file.name, url: fileUrl }));
       }
 
       dispatch(setLoadingFile({ fileName: file.name, isLoading: false }));
@@ -60,7 +61,7 @@ const UploadDocs = () => {
       setFilesToProcess((prev) => prev.slice(1)); // Remove the processed file from queue
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [filesToProcess]);
+  }, [filesToProcess, validateAndProcessFile]);
 
   const handleFileChange = (e) => {
     const files = e.target.files;
@@ -71,11 +72,14 @@ const UploadDocs = () => {
   };
 
   const addFilesToStore = (files) => {
-    const pdfFiles = files.filter(
-      (file) => file.type === "application/pdf"
-    );
+    const pdfFiles = files.filter((file) => file.type === "application/pdf");
     if (pdfFiles.length > 0) {
-      dispatch(addFiles(pdfFiles));
+      const serializableFiles = pdfFiles.map((file) => ({
+        name: file.name,
+        size: file.size,
+      }));
+      dispatch(addFiles(serializableFiles));
+      setFilesToProcess((prev) => [...prev, ...pdfFiles]);
     }
   };
 

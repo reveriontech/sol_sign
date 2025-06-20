@@ -1,10 +1,10 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-  selectedFiles: [],
+  selectedFiles: [], // Will now store { name, size } objects
+  documentUrls: [], // Store objects with { name, url }
   loadingFiles: {},
   fileStatuses: {},
-  documentUrls: [], // Store URLs for all valid documents
   currentDocumentIndex: 0, // Index to track the active document
 };
 
@@ -13,45 +13,44 @@ const documentSlice = createSlice({
   initialState,
   reducers: {
     addFiles: (state, action) => {
-      const newFiles = action.payload;
-      // Prevent adding duplicate files
-      const nonDuplicateFiles = newFiles.filter(
-        (file) => !state.selectedFiles.some((sf) => sf.name === file.name)
+      // Expects an array of { name, size } objects
+      const newFiles = action.payload.filter(
+        (file) => !state.selectedFiles.some((f) => f.name === file.name)
       );
-      state.selectedFiles = [...state.selectedFiles, ...nonDuplicateFiles];
+      state.selectedFiles.push(...newFiles);
     },
     removeFile: (state, action) => {
       const indexToRemove = action.payload;
       const removedFile = state.selectedFiles[indexToRemove];
 
-      // Clean up state for the removed file
-      delete state.loadingFiles[removedFile.name];
-      delete state.fileStatuses[removedFile.name];
+      if (removedFile) {
+        delete state.loadingFiles[removedFile.name];
+        delete state.fileStatuses[removedFile.name];
 
-      // Remove file and its corresponding URL
-      state.selectedFiles.splice(indexToRemove, 1);
-      state.documentUrls.splice(indexToRemove, 1);
-      
-      // Adjust the current document index if necessary
-      if (state.currentDocumentIndex >= state.selectedFiles.length) {
-        state.currentDocumentIndex = Math.max(0, state.selectedFiles.length - 1);
+        state.selectedFiles.splice(indexToRemove, 1);
+        const urlIndex = state.documentUrls.findIndex(
+          (doc) => doc.name === removedFile.name
+        );
+        if (urlIndex > -1) {
+          state.documentUrls.splice(urlIndex, 1);
+        }
+
+        if (state.currentDocumentIndex >= state.documentUrls.length) {
+          state.currentDocumentIndex = Math.max(
+            0,
+            state.documentUrls.length - 1
+          );
+        }
       }
     },
     setLoadingFile: (state, action) => {
-      const { fileName, isLoading } = action.payload;
-      state.loadingFiles[fileName] = isLoading;
+      state.loadingFiles[action.payload.fileName] = action.payload.isLoading;
     },
     setFileStatus: (state, action) => {
-      const { fileName, status } = action.payload;
-      state.fileStatuses[fileName] = status;
+      state.fileStatuses[action.payload.fileName] = action.payload.status;
     },
     addDocumentUrl: (state, action) => {
-        const { file, url } = action.payload;
-        // Ensure we don't add duplicate URLs
-        const existingIndex = state.selectedFiles.findIndex(f => f.name === file.name);
-        if (existingIndex !== -1 && !state.documentUrls[existingIndex]) {
-            state.documentUrls[existingIndex] = url;
-        }
+      state.documentUrls.push(action.payload);
     },
     setCurrentDocumentIndex: (state, action) => {
       state.currentDocumentIndex = action.payload;

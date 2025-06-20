@@ -1,5 +1,9 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { Document, Page, pdfjs } from "react-pdf";
+import "react-pdf/dist/esm/Page/AnnotationLayer.css";
+import "react-pdf/dist/esm/Page/TextLayer.css";
+import pdfWorker from "pdfjs-dist/build/pdf.worker?url";
 import "@/styles/components/_placefields.scss";
 import {
   setSelectedRecipient,
@@ -9,7 +13,12 @@ import {
   updateFieldValue,
   updateFieldChecked,
 } from "@/store/slices/fieldsSlice";
-import { addFiles, setCurrentDocumentIndex } from "@/store/slices/documentSlice";
+import {
+  addFiles,
+  setCurrentDocumentIndex,
+} from "@/store/slices/documentSlice";
+
+pdfjs.GlobalWorkerOptions.workerSrc = pdfWorker;
 
 const PlaceFields = () => {
   const dispatch = useDispatch();
@@ -28,13 +37,36 @@ const PlaceFields = () => {
   const [draggedFieldType, setDraggedFieldType] = useState(null);
   const [isDraggingField, setIsDraggingField] = useState(false);
   const [selectedFieldId, setSelectedFieldId] = useState(null);
-  const [fieldsSnapshot, setFieldsSnapshot] = useState([]); 
+  const [fieldsSnapshot, setFieldsSnapshot] = useState([]);
+  const [numPages, setNumPages] = useState(null);
+  const [pageNumber, setPageNumber] = useState(1);
+  const [containerWidth, setContainerWidth] = useState(0);
 
   // Refs
   const pdfWrapperRef = useRef(null);
   const hiddenFileInput = useRef(null);
+  const currentDocument = documentUrls[currentDocumentIndex];
+  const currentDocumentUrl = currentDocument ? currentDocument.url : null;
 
-  const currentDocumentUrl = documentUrls[currentDocumentIndex];
+  useEffect(() => {
+    function setWidth() {
+      if (pdfWrapperRef.current) {
+        setContainerWidth(pdfWrapperRef.current.clientWidth);
+      }
+    }
+    if (isModalOpen) {
+      setWidth();
+      window.addEventListener("resize", setWidth);
+    }
+    return () => {
+      window.removeEventListener("resize", setWidth);
+    };
+  }, [isModalOpen]);
+
+  const onDocumentLoadSuccess = ({ numPages: nextNumPages }) => {
+    setNumPages(nextNumPages);
+    setPageNumber(1);
+  };
 
   // Handlers
   const handleTriggerUpload = () => {
@@ -58,7 +90,7 @@ const PlaceFields = () => {
       return;
     }
     if (!selectedRecipient) {
-      alert("Please select a recipient from the sidebar before placing a field.");
+      alert("Please select a recipient before placing a field.");
       e.preventDefault();
       return;
     }
@@ -69,9 +101,10 @@ const PlaceFields = () => {
 
   const handleDrop = (e) => {
     e.preventDefault();
-    if (!draggedFieldType || !pdfWrapperRef.current || !selectedRecipient) return;
+    if (!draggedFieldType || !pdfWrapperRef.current || !selectedRecipient)
+      return;
 
-    const rect = pdfWrapperRef.current.getBoundingClientRect();
+    const rect = e.currentTarget.getBoundingClientRect();
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;
 
@@ -81,7 +114,11 @@ const PlaceFields = () => {
         recipientId: selectedRecipient.id,
         recipientName: selectedRecipient.name,
         documentIndex: currentDocumentIndex,
-        position: { x, y },
+        pageIndex: pageNumber - 1,
+        position: {
+          x: (x / rect.width) * 100,
+          y: (y / rect.height) * 100,
+        },
         size:
           draggedFieldType === "checkbox"
             ? { width: 24, height: 24 }
@@ -103,31 +140,39 @@ const PlaceFields = () => {
     const rect = pdfWrapperRef.current.getBoundingClientRect();
     let x = e.clientX - rect.left;
     let y = e.clientY - rect.top;
-    
-    // Prevent dragging outside the container
-    x = Math.max(0, Math.min(x, rect.width - (fields.find(f => f.id === selectedFieldId)?.size.width || 0)));
-    y = Math.max(0, Math.min(y, rect.height - (fields.find(f => f.id === selectedFieldId)?.size.height || 0)));
 
-    dispatch(updateFieldPosition({ fieldId: selectedFieldId, position: { x, y } }));
+    const field = fields.find((f) => f.id === selectedFieldId);
+    if (!field) return;
+
+    x = Math.max(0, Math.min(x, rect.width - field.size.width));
+    y = Math.max(0, Math.min(y, rect.height - field.size.height));
+
+    const position = {
+      x: (x / rect.width) * 100,
+      y: (y / rect.height) * 100,
+    };
+    dispatch(updateFieldPosition({ fieldId: selectedFieldId, position }));
   };
 
   const handleFieldDragEnd = () => setIsDraggingField(false);
 
   // Render the fields for the currently visible document
   const visibleFields = fields.filter(
-    (field) => field.documentIndex === currentDocumentIndex
+    (field) =>
+      field.documentIndex === currentDocumentIndex &&
+      field.pageIndex === pageNumber - 1
   );
-  
+
   const getFieldContent = (field) => {
     switch (field.type) {
-      case 'checkbox':
+      case "checkbox":
         return <input type="checkbox" checked={field.checked} readOnly />;
-      case 'date':
+      case "date":
         return <span className="field-type-label">Date Signed</span>;
       default:
         return <span className="field-type-label">{field.type}</span>;
     }
-  }
+  };
 
   // For cancel
   const handleOpenModal = () => {
@@ -137,10 +182,8 @@ const PlaceFields = () => {
 
   // Cancel: revert to snapshot
   const handleCancel = () => {
-    // Remove any fields added after opening the modal
-    const snapshotIds = new Set(fieldsSnapshot.map(f => f.id));
-    fields.forEach(f => {
-      if (!snapshotIds.has(f.id)) {
+    fields.forEach((f) => {
+      if (!fieldsSnapshot.some((snap) => snap.id === f.id)) {
         dispatch(removeField(f.id));
       }
     });
@@ -152,23 +195,26 @@ const PlaceFields = () => {
       <section className="placefields-container">
         <div className="placefields-box-container">
           <div className="placefields-box-header">
-            <span className="header-step">3</span>
-            <h1>Place Fields</h1>
-          </div>
+                <h1>Place Fields</h1>
+            </div>
 
           <div className="placefields-box-content">
             {currentDocumentUrl ? (
               <div className="doc-preview-container">
-                <iframe
-                  src={currentDocumentUrl}
-                  title="PDF Preview"
-                  className="doc-preview-iframe"
-                  scrolling="no"
-                />
-                <button
-                  className="open-editor-btn"
-                  onClick={handleOpenModal}
-                >
+                <div className="pdf-preview-wrapper">
+                  <Document
+                    file={currentDocumentUrl}
+                    onLoadError={console.error}
+                  >
+                    <Page
+                      pageNumber={1}
+                      width={300}
+                      renderTextLayer={false}
+                      renderAnnotationLayer={false}
+                    />
+                  </Document>
+                </div>
+                <button className="open-editor-btn" onClick={handleOpenModal}>
                   Place Fields
                 </button>
               </div>
@@ -192,19 +238,21 @@ const PlaceFields = () => {
                 />
               </div>
             )}
-            
+
             {documentUrls.length > 1 && (
-                <div className="pagination-controls">
-                    {documentUrls.map((_, index) => (
-                        <button
-                            key={index}
-                            className={`page-btn ${index === currentDocumentIndex ? 'active' : ''}`}
-                            onClick={() => dispatch(setCurrentDocumentIndex(index))}
-                        >
-                            {index + 1}
-                        </button>
-                    ))}
-                </div>
+              <div className="pagination-controls">
+                {documentUrls.map((_, index) => (
+                  <button
+                    key={index}
+                    className={`page-btn ${
+                      index === currentDocumentIndex ? "active" : ""
+                    }`}
+                    onClick={() => dispatch(setCurrentDocumentIndex(index))}
+                  >
+                    {index + 1}
+                  </button>
+                ))}
+              </div>
             )}
           </div>
         </div>
@@ -243,55 +291,111 @@ const PlaceFields = () => {
                   </button>
                 ))}
               </div>
-              <div style={{ display: 'flex', gap: '0.5rem', marginTop: 'auto' }}>
-                <button className="close-modal-btn" onClick={() => setIsModalOpen(false)}>Done</button>
-                <button className="cancel-modal-btn" onClick={handleCancel}>Cancel</button>
+              <div className="sidebar-actions-desktop">
+                <button
+                  className="close-modal-btn"
+                  onClick={() => setIsModalOpen(false)}
+                >
+                  Done
+                </button>
+                <button className="cancel-modal-btn" onClick={handleCancel}>
+                  Cancel
+                </button>
               </div>
             </aside>
             <main
               className="editor-main"
-              ref={pdfWrapperRef}
-              onDragOver={handleDragOver}
-              onDrop={handleDrop}
               onMouseMove={handleFieldDrag}
               onMouseUp={handleFieldDragEnd}
               onMouseLeave={handleFieldDragEnd}
             >
               {currentDocumentUrl && (
-                <iframe
-                  src={currentDocumentUrl}
-                  title="PDF Document"
-                  className="pdf-iframe-full"
-                />
-              )}
-              {visibleFields.map((field) => (
-                <div
-                  key={field.id}
-                  className="field-overlay"
-                  style={{
-                    left: field.position.x,
-                    top: field.position.y,
-                    width: field.size.width,
-                    height: field.size.height,
-                  }}
-                  onMouseDown={(e) => handleFieldDragStart(field.id, e)}
-                >
-                  <div className="field-content">
-                    {getFieldContent(field)}
-                    <span className="field-recipient-label">
-                      for {field.recipientName}
-                    </span>
-                  </div>
-                  <button
-                    className="remove-field-btn"
-                    onClick={() => dispatch(removeField(field.id))}
+                <div className="pdf-render-area" ref={pdfWrapperRef}>
+                  <Document
+                    file={currentDocumentUrl}
+                    onLoadSuccess={onDocumentLoadSuccess}
+                    onLoadError={console.error}
                   >
-                    ×
+                    <div className="pdf-page-container">
+                      <Page
+                        key={`page_${pageNumber}`}
+                        pageNumber={pageNumber}
+                        width={containerWidth}
+                      />
+                      <div
+                        className="interactive-overlay"
+                        onDragOver={handleDragOver}
+                        onDrop={handleDrop}
+                      >
+                        {visibleFields.map((field) => (
+                          <div
+                            key={field.id}
+                            className="placed-field-wrapper"
+                            style={{
+                              left: `${field.position.x}%`,
+                              top: `${field.position.y}%`,
+                              width: field.size.width,
+                              height: field.size.height,
+                            }}
+                          >
+                            <span className="field-recipient-label-outside">
+                              {field.recipientName}
+                            </span>
+                            <div
+                              className="field-overlay"
+                              onMouseDown={(e) =>
+                                handleFieldDragStart(field.id, e)
+                              }
+                            >
+                              <div className="field-content">
+                                {getFieldContent(field)}
+                              </div>
+                            </div>
+                            <button
+                              className="remove-field-btn"
+                              onClick={() => dispatch(removeField(field.id))}
+                            >
+                              ×
+                            </button>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </Document>
+                </div>
+              )}
+              {numPages && numPages > 1 && (
+                <div className="page-navigation">
+                  <button
+                    disabled={pageNumber <= 1}
+                    onClick={() => setPageNumber(pageNumber - 1)}
+                  >
+                    ‹
+                  </button>
+                  <span>
+                    Page {pageNumber} of {numPages}
+                  </span>
+                  <button
+                    disabled={pageNumber >= numPages}
+                    onClick={() => setPageNumber(pageNumber + 1)}
+                  >
+                    ›
                   </button>
                 </div>
-              ))}
+              )}
             </main>
-          </div>
+            <div className="sidebar-actions-mobile">
+              <button
+                className="close-modal-btn"
+                onClick={() => setIsModalOpen(false)}
+              >
+                Done
+              </button>
+              <button className="cancel-modal-btn" onClick={handleCancel}>
+                Cancel
+              </button>
+                </div>
+            </div>
         </div>
       )}
     </>

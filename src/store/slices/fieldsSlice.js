@@ -1,4 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, nanoid } from '@reduxjs/toolkit';
 
 const initialState = {
   fields: [], // Array of field objects with position, type, recipient, etc.
@@ -30,21 +30,32 @@ const fieldsSlice = createSlice({
     setIsPlacingField: (state, action) => {
       state.isPlacingField = action.payload;
     },
-    addField: (state, action) => {
-      const newField = {
-        id: Date.now(),
-        type: action.payload.type,
-        recipientId: action.payload.recipientId,
-        recipientName: action.payload.recipientName,
-        position: action.payload.position,
-        size: action.payload.size || { width: 150, height: 50 },
-        value: action.payload.value || '',
-        checked: action.payload.checked || false,
-        required: action.payload.required || true,
-        page: action.payload.page || 1,
-        ...action.payload,
-      };
-      state.fields.push(newField);
+    addField: {
+      reducer: (state, action) => {
+        state.fields.push(action.payload);
+      },
+      prepare: ({
+        type,
+        recipientId,
+        recipientName,
+        documentIndex,
+        pageIndex,
+        position,
+        size,
+      }) => ({
+        payload: {
+          id: nanoid(),
+          type,
+          recipientId,
+          recipientName,
+          documentIndex,
+          pageIndex,
+          position,
+          size,
+          value: "",
+          checked: false,
+        },
+      }),
     },
     updateField: (state, action) => {
       const { id, updates } = action.payload;

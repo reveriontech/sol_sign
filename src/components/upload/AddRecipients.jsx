@@ -76,16 +76,17 @@ const AddRecipients = () => {
         <div className="addrecipients-box-content">
           <form className="add-recipients-form" onSubmit={handleAddRecipient}>
             {/* Name */}
-            <div>
+            <div className="input-group">
               <label htmlFor="name">Name</label>
               <input
                 type="text"
                 id="name"
-                placeholder="Enter name"
+                placeholder={nameTouched && !isNameValid ? "Name is required." : "Enter name"}
                 value={name}
                 onChange={(e) => dispatch(setName(e.target.value))}
                 onBlur={() => dispatch(setNameTouched(true))}
                 className={nameTouched && !isNameValid ? "input-error" : ""}
+                style={nameTouched && !isNameValid ? { color: "#e74c3c" } : {}}
               />
               {nameTouched && !isNameValid && (
                 <span className="error-message">Name is required.</span>
@@ -93,16 +94,17 @@ const AddRecipients = () => {
             </div>
 
             {/* Email */}
-            <div>
+            <div className="input-group">
               <label htmlFor="email">Email</label>
               <input
                 type="email"
                 id="email"
-                placeholder="Enter email"
+                placeholder={emailTouched && !isEmailValid ? "Enter a valid email." : "Enter email"}
                 value={email}
                 onChange={(e) => dispatch(setEmail(e.target.value))}
                 onBlur={() => dispatch(setEmailTouched(true))}
                 className={emailTouched && !isEmailValid ? "input-error" : ""}
+                style={emailTouched && !isEmailValid ? { color: "#e74c3c" } : {}}
               />
               {emailTouched && !isEmailValid && (
                 <span className="error-message">Enter a valid email.</span>
@@ -114,13 +116,15 @@ const AddRecipients = () => {
               <label>Role</label>
               <div className="custom-dropdown">
                 <div
-                  className="dropdown-header"
+                  className={`dropdown-header${roleTouched && !isRoleValid ? " input-error" : ""}`}
                   onClick={() => {
                     toggleDropdown();
                     dispatch(setRoleTouched(true));
                   }}
                 >
-                  <span>{selectedRole}</span>
+                  <span style={roleTouched && !isRoleValid ? { color: "#e74c3c" } : {}}>
+                    {roleTouched && !isRoleValid ? "Select a role." : selectedRole}
+                  </span>
                   <span className={`arrow ${isDropdownOpen ? "open" : ""}`}>
                     ▼
                   </span>

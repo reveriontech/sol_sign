@@ -8,70 +8,70 @@ $medium-desktop: 1280px;
 $large-desktop: 1440px;
 
 .review-send-container {
-  width: 100%;
+    width: 100%;
   min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   justify-content: flex-start;
   padding-top: 2rem;
 
-  .review-send-box-container {
+    .review-send-box-container {
     border: 1px solid reviewsend.$color-gray-300;
-    background-color: reviewsend.$color-white;
+        background-color: reviewsend.$color-white;
     border-radius: 1rem;
-    width: 100%;
-    max-width: 800px;
-    min-height: auto;
+        width: 100%;
+        max-width: 800px;
+        min-height: auto;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
     padding: 1.5rem 2rem 2.5rem 2rem;
 
-    .review-send-box-header {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 1rem;
+        .review-send-box-header {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 1rem;
       padding: 0 0 0.5rem 0;
 
-      h1 {
-        font-size: reviewsend.$font-size-2xl;
-        font-weight: reviewsend.$font-weight-bold;
-        color: reviewsend.$color-gray-900;
-      }
+            h1 {
+                font-size: reviewsend.$font-size-2xl;
+                font-weight: reviewsend.$font-weight-bold;
+                color: reviewsend.$color-gray-900;
+            }
 
-      hr {
-        width: 100%;
-        height: 1px;
+            hr { 
+                width: 100%;
+                height: 1px;
         background-color: reviewsend.$color-gray-300;
         margin: 0.5rem 0 0 0;
-      }
-    }
+            }
+        }
 
-    .review-send-box-container-wrapper {
-      width: 100%;
-      display: flex;
-      flex-direction: column;
+        .review-send-box-container-wrapper {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
       align-items: stretch;
       padding: 0;
 
-      .review-send-box-content {
-        display: flex;
-        flex-direction: column;
+            .review-send-box-content {
+                display: flex;
+                flex-direction: column;
         align-items: stretch;
-        justify-content: center;
+                justify-content: center;
         width: 100%;
         padding: 1.5rem 2rem 1.5rem 2rem;
-        background-color: reviewsend.$color-gray-100;
+                background-color: reviewsend.$color-gray-100;
         border-radius: 1rem;
         margin-bottom: 2.5rem;
         margin-top: 1rem;
         box-sizing: border-box;
-
-        .review-send-box-content-item {
-          display: flex;
-          flex-direction: row;
-          align-items: center;
-          justify-content: space-between;
+    
+                .review-send-box-content-item {
+                    display: flex;
+                    flex-direction: row;
+                    align-items: center;
+                    justify-content: space-between;
           width: 100%;
           font-size: reviewsend.$font-size-base;
           margin-bottom: 1.2rem;
@@ -205,6 +205,177 @@ $large-desktop: 1440px;
           opacity: 0.85;
         }
       }
+    }
+  }
+}
+
+@media (max-width: $large-desktop) {
+  .review-send-container {
+    .review-send-box-container {
+      max-width: 90%;
+    }
+  }
+}
+
+@media (max-width: $medium-desktop) {
+  .review-send-container {
+    padding-top: 1rem;
+    .review-send-box-container {
+      padding: 1rem 1.2rem 1.5rem 1.2rem;
+      .review-send-box-header {
+        h1 {
+          font-size: reviewsend.$font-size-xl;
+        }
+      }
+      .review-send-box-container-wrapper {
+        .review-send-box-content {
+          padding: 1rem 1.2rem 1rem 1.2rem;
+          .review-send-box-content-item {
+            font-size: reviewsend.$font-size-base;
+          }
+        }
+        .review-send-options {
+          padding: 0 1.2rem 0 1.2rem;
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: $small-desktop) {
+  .review-send-container {
+    padding-top: 0.5rem;
+    .review-send-box-container {
+      .review-send-box-header {
+        h1 {
+          font-size: reviewsend.$font-size-lg;
+        }
+      }
+      .review-send-box-container-wrapper {
+        .review-send-box-content {
+          padding: 0.7rem 0.7rem 0.7rem 0.7rem;
+          .review-send-box-content-item {
+            font-size: reviewsend.$font-size-sm;
+          }
+        }
+        .review-send-options {
+          padding: 0 0.7rem 0 0.7rem;
+        }
+        .review-send-actions {
+          gap: 0.5rem;
+          button {
+            padding: 0.5rem 1.2rem;
+            font-size: reviewsend.$font-size-sm;
+          }
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: $tablet) {
+  .review-send-container {
+    .review-send-box-container {
+      max-width: 98%;
+      padding: 0.5rem 0.5rem 1rem 0.5rem;
+      .review-send-box-header {
+        padding: 0.5rem 0.5rem 0.5rem 0.5rem;
+        h1 {
+          font-size: reviewsend.$font-size-base;
+        }
+      }
+      .review-send-box-container-wrapper {
+        .review-send-box-content {
+          padding: 0.5rem 0.5rem 0.5rem 0.5rem;
+          .review-send-box-content-item {
+            font-size: reviewsend.$font-size-xs;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 0.2rem;
+          }
+        }
+        .review-send-options {
+          padding: 0 0.5rem 0 0.5rem;
+          label {
+            font-size: reviewsend.$font-size-xs;
+          }
+        }
+        .review-send-actions {
+          flex-direction: column;
+          align-items: stretch;
+          margin-left: 0;
+          button {
+            width: 100%;
+            margin-bottom: 0.5rem;
+          }
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: $mobile) {
+  .review-send-container {
+    .review-send-box-container {
+      max-width: 100%;
+      padding: 0.25rem;
+      .review-send-box-header {
+        padding: 0.25rem;
+        h1 {
+          font-size: reviewsend.$font-size-sm;
+        }
+      }
+      .review-send-box-container-wrapper {
+        .review-send-box-content {
+          padding: 0.2rem;
+          .review-send-box-content-item {
+            font-size: reviewsend.$font-size-xs;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 0.1rem;
+          }
+        }
+        .review-send-options {
+          padding: 0 0.2rem 0 0.2rem;
+          label {
+            font-size: reviewsend.$font-size-xs;
+          }
+        }
+        .review-send-actions {
+          flex-direction: column;
+          align-items: stretch;
+          margin-left: 0;
+          gap: 0.3rem;
+          button {
+            width: 100%;
+            font-size: reviewsend.$font-size-xs;
+            padding: 0.4rem 0.5rem;
+          }
+        }
+      }
+    }
+  }
+}
+
+.add-recipients-form {
+  div {
+    position: relative;
+
+    input {
+      padding-bottom: 1.5rem;
+    }
+
+    .error-message {
+      position: absolute;
+      left: 0;
+      bottom: 0.2rem;
+      color: #e74c3c;
+      font-size: 0.85rem;
+      font-weight: 400;
+      margin: 0;
+      pointer-events: none;
+      background: transparent;
+      z-index: 2;
     }
   }
 }

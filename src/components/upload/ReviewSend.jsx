@@ -2,16 +2,23 @@ import React, { useState, useRef, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { selectAllFiles, selectAllRecipients } from "@/store/selectors";
 import { SlArrowDown } from "react-icons/sl";
+import { sendSignatureEmail } from "@/components/template/emailsender";
+import { Session } from "@/routes/SessionProvider";
 import "@/styles/components/_reviewsend.scss";
 
 const ReviewSend = () => {
   const files = useSelector(selectAllFiles);
   const recipients = useSelector(selectAllRecipients);
+  const { userDetails } = Session();
 
   // Estimated Completion dropdown state
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [businessDays, setBusinessDays] = useState(3); // default to 3
   const dropdownRef = useRef(null);
+
+  // Subject and message (could be from Redux or local state)
+  const [subject, setSubject] = useState("");
+  const [message, setMessage] = useState("");
 
   // Close dropdown on outside click
   useEffect(() => {
@@ -41,6 +48,30 @@ const ReviewSend = () => {
 
   // Dropdown options
   const dayOptions = [1, 2, 3, 4, 5];
+
+  // Email sender
+  const handleSendForSignature = async () => {
+    if (!recipients.length) {
+      alert("No recipients to send to.");
+      return;
+    }
+    const sender = userDetails?.username || "Sender";
+    const recipientEmails = recipients.map(r => r.email).join(", ");
+    try {
+      await sendSignatureEmail({
+        sender,
+        recipients: recipientEmails,
+        fileCount: files.length,
+        recipientCount: recipients.length,
+        recipientList: recipientEmails,
+        subject,
+        message,
+      });
+      alert("Email sent successfully!");
+    } catch (error) {
+      alert("Failed to send email: " + (error?.text || error?.message || error));
+    }
+  };
 
   return (
     <section className="review-send-container">
@@ -130,7 +161,9 @@ const ReviewSend = () => {
           </div>
           <div className="review-send-actions">
             <button className="btn-draft">Save as Draft</button>
-            <button className="btn-send">Send for Signature</button>
+            <button className="btn-send" type="button" onClick={handleSendForSignature}>
+              Send for Signature
+            </button>
           </div>
         </div>
       </div>

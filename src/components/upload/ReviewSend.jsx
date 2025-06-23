@@ -1,0 +1,141 @@
+import React, { useState, useRef, useEffect } from "react";
+import { useSelector } from "react-redux";
+import { selectAllFiles, selectAllRecipients } from "@/store/selectors";
+import { SlArrowDown } from "react-icons/sl";
+import "@/styles/components/_reviewsend.scss";
+
+const ReviewSend = () => {
+  const files = useSelector(selectAllFiles);
+  const recipients = useSelector(selectAllRecipients);
+
+  // Estimated Completion dropdown state
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [businessDays, setBusinessDays] = useState(3); // default to 3
+  const dropdownRef = useRef(null);
+
+  // Close dropdown on outside click
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setDropdownOpen(false);
+      }
+    }
+    if (dropdownOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    } else {
+      document.removeEventListener("mousedown", handleClickOutside);
+    }
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [dropdownOpen]);
+
+  // Checkbox states
+  const [notifyAll, setNotifyAll] = useState(false);
+  const [reminder, setReminder] = useState(false);
+  const [requireAuth, setRequireAuth] = useState(false);
+
+  // Helper for pluralization
+  const fileLabel = files.length === 1 ? "file" : "files";
+  const recipientLabel = recipients.length === 1 ? "recipient" : "recipients";
+
+  // Dropdown options
+  const dayOptions = [1, 2, 3, 4, 5];
+
+  return (
+    <section className="review-send-container">
+      <div className="review-send-box-container">
+        <div className="review-send-box-header">
+          <h1>Review & Send</h1>
+          <hr />
+        </div>
+
+        {/* Review & Send Box Content */}
+        <div className="review-send-box-container-wrapper">
+          <div className="review-send-box-content">
+            <div className="review-send-box-content-item">
+              <span>Document</span>
+              <span>
+                {files.length} {fileLabel}
+              </span>
+            </div>
+            <div className="review-send-box-content-item">
+              <span>Recipients</span>
+              <span>
+                {recipients.length} {recipientLabel}
+              </span>
+            </div>
+            <div className="review-send-box-content-item">
+              <span>Estimated Completion</span>
+              <span className="dropdown-estimated" ref={dropdownRef}>
+                <span
+                  className="dropdown-value"
+                  onClick={() => setDropdownOpen((open) => !open)}
+                  tabIndex={0}
+                  style={{ cursor: "pointer", display: "inline-flex", alignItems: "center", gap: "0.3rem" }}
+                >
+                  Ends in {businessDays} business days <SlArrowDown style={{ fontSize: "1em" }} />
+                </span>
+
+                {/* Dropdown Menu */}
+                {dropdownOpen && (
+                  <div className="dropdown-menu">
+                    <div className="dropdown-row">
+                      <label>Ends in:</label>
+                      <select
+                        value={businessDays}
+                        onChange={(e) => {
+                          setBusinessDays(Number(e.target.value));
+                          setDropdownOpen(false);
+                        }}
+                      >
+                        {dayOptions.map((d) => (
+                          <option key={d} value={d}>
+                            {d}
+                          </option>
+                        ))}
+                      </select>
+                      <span>business days</span>
+                    </div>
+                  </div>
+                )}
+              </span>
+            </div>
+          </div>
+          <div className="review-send-options">
+            <label>
+              <input
+                type="checkbox"
+                checked={notifyAll}
+                onChange={() => setNotifyAll((v) => !v)}
+              />
+              Send email notifications to all recipients
+            </label>
+            <label>
+              <input
+                type="checkbox"
+                checked={reminder}
+                onChange={() => setReminder((v) => !v)}
+              />
+              Set reminder in 3 days if not signed
+            </label>
+            <label>
+              <input
+                type="checkbox"
+                checked={requireAuth}
+                onChange={() => setRequireAuth((v) => !v)}
+              />
+              Require authentication for signers
+            </label>
+          </div>
+          <div className="review-send-actions">
+            <button className="btn-draft">Save as Draft</button>
+            <button className="btn-send">Send for Signature</button>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+export default ReviewSend;

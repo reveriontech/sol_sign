@@ -10,6 +10,7 @@ const initialState = {
   emailTouched: false,
   roleTouched: false,
   roles: ["Signer", "Approver", "CC"],
+  emailRecipient: "",
 };
 
 const recipientsSlice = createSlice({
@@ -40,7 +41,8 @@ const recipientsSlice = createSlice({
     addRecipient: (state, action) => {
       const newRecipient = action.payload;
       state.recipients.push(newRecipient);
-      // Reset form
+      state.emailRecipient = newRecipient.email;
+
       state.name = "";
       state.email = "";
       state.selectedRole = "Select Role";
@@ -52,9 +54,15 @@ const recipientsSlice = createSlice({
     removeRecipient: (state, action) => {
       const id = action.payload;
       state.recipients = state.recipients.filter(recipient => recipient.id !== id);
+      
+      // If no recipients remain, clear the emailRecipient
+      if (state.recipients.length === 0) {
+        state.emailRecipient = "";
+      }
     },
     clearRecipients: (state) => {
       state.recipients = [];
+      state.emailRecipient = "";
     },
     resetForm: (state) => {
       state.name = "";
@@ -64,6 +72,9 @@ const recipientsSlice = createSlice({
       state.emailTouched = false;
       state.roleTouched = false;
       state.isDropdownOpen = false;
+    },
+    setEmailRecipient: (state, action) => {
+      state.emailRecipient = action.payload;
     },
   },
 });
@@ -80,6 +91,7 @@ export const {
   removeRecipient,
   clearRecipients,
   resetForm,
+  setEmailRecipient,
 } = recipientsSlice.actions;
 
 export default recipientsSlice.reducer; 

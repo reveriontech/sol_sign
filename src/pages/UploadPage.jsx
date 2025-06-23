@@ -5,6 +5,8 @@ import '../styles/pages/_uploadpages.scss'
 import UploadDocs from '../components/upload/UploadDocs'
 import AddRecipients from '../components/upload/AddRecipients'
 import PlaceFields from '../components/upload/PlaceFields'
+import EmailSubject from '../components/upload/EmailSubject'
+import ReviewSend from '../components/upload/ReviewSend'
 
 const UploadPage = () => {
   return (
@@ -13,6 +15,8 @@ const UploadPage = () => {
         <UploadDocs />
         <AddRecipients />
         <PlaceFields />
+        <EmailSubject />
+        <ReviewSend />
       </section>
     </>
   )

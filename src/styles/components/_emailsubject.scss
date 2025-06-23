@@ -1,0 +1,129 @@
+@use "../utils/variables" as emailsubject;
+
+// Breakpoints
+$mobile: 360px;
+$tablet: 768px;
+$small-desktop: 1024px;
+$medium-desktop: 1280px;
+$large-desktop: 1440px;
+
+.email-subject-container {
+  width: 100%;
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1rem;
+  overflow-y: auto;
+  margin-bottom: 1rem;
+
+  .email-subject-box-container {
+    border: 1px solid emailsubject.$color-gray-400;
+    background-color: emailsubject.$color-white;
+    border-radius: 0.6rem;
+    width: 100%;
+    max-width: 800px;
+    min-height: auto;
+
+    .email-subject-box-header {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 1rem;
+      padding: 1.5rem 1.5rem 0 1.5rem;
+
+      h1 {
+        font-size: emailsubject.$font-size-2xl;
+        font-weight: emailsubject.$font-weight-bold;
+        color: emailsubject.$color-gray-900;
+      }
+
+      hr {
+        width: 100%;
+        height: 1px;
+        background-color: emailsubject.$color-gray-400;
+      }
+    }
+
+    .email-subject-header-content {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 1rem;
+      padding: 1.5rem 1.5rem 0 1.5rem;
+
+      .subject-input {
+        display: flex;
+        flex-direction: row;
+        align-items: flex-start;
+        gap: 0.5rem;
+
+        label {
+          font-size: emailsubject.$font-size-base;
+          font-weight: emailsubject.$font-weight-bold;
+          color: emailsubject.$color-gray-900;
+        }
+
+        input {
+          width: 100%;
+          padding: 0.5rem;
+          border: none;
+          outline: none;
+          margin-top: -0.3rem;
+        }
+      }
+
+      .email-recipient {
+        display: flex;
+        flex-direction: row;
+        align-items: flex-start;
+        gap: 0.5rem;
+
+        label {
+          font-size: emailsubject.$font-size-base;
+          font-weight: emailsubject.$font-weight-bold;
+          color: emailsubject.$color-gray-900;
+          min-width: fit-content;
+        }
+
+        .email-item {
+          font-size: emailsubject.$font-size-xs;
+          font-weight: emailsubject.$font-weight-normal;
+          color: emailsubject.$color-gray-100;
+          background-color: emailsubject.$color-gray-400;
+          padding: 0.2rem 0.5rem;
+          border-radius: 1rem;
+          border: 1px solid emailsubject.$color-gray-300;
+          display: inline-block;
+          width: fit-content;
+          margin-top: -0.2rem;
+        }
+
+        .no-recipients {
+          font-size: emailsubject.$font-size-xs;
+          font-weight: emailsubject.$font-weight-normal;
+          color: emailsubject.$color-gray-500;
+          font-style: italic;
+        }
+      }
+    }
+
+    .message-area {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.5rem;
+      padding: 1.5rem 1.5rem 0 1.5rem;
+      margin-bottom: 1rem;
+
+      textarea {
+        width: 100%;
+        height: 150px;
+        padding: 0.5rem;
+        border-radius: 0.5rem;
+        border: 1px solid emailsubject.$color-gray-400;
+        margin-top: -0.3rem;
+      }
+    }
+  }
+}

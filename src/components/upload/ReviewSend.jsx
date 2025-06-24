@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { selectAllFiles, selectAllRecipients } from "@/store/selectors";
+import { selectAllFiles, selectAllRecipients, selectEmailSubject, selectEmailMessage } from "@/store/selectors";
 import { addRecentlySent } from "@/store/slices/emailSlice";
 import { SlArrowDown } from "react-icons/sl";
 import { sendSignatureEmail } from "@/components/template/emailsender";
@@ -11,16 +11,14 @@ const ReviewSend = () => {
   const dispatch = useDispatch();
   const files = useSelector(selectAllFiles);
   const recipients = useSelector(selectAllRecipients);
+  const subject = useSelector(selectEmailSubject);
+  const message = useSelector(selectEmailMessage);
   const { userDetails } = Session();
 
   // Estimated Completion dropdown state
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [businessDays, setBusinessDays] = useState(3); // default to 3
   const dropdownRef = useRef(null);
-
-  // Subject and message (could be from Redux or local state)
-  const [subject, setSubject] = useState("");
-  const [message, setMessage] = useState("");
 
   // Close dropdown on outside click
   useEffect(() => {
@@ -57,6 +55,9 @@ const ReviewSend = () => {
       alert("No recipients to send to.");
       return;
     }
+    
+    console.log("Sending email with:", { subject, message, recipients: recipients.length, files: files.length });
+    
     const sender = userDetails?.username || "Sender";
     const recipientEmails = recipients.map(r => r.email).join(", ");
     try {
@@ -71,14 +72,17 @@ const ReviewSend = () => {
       });
       
       // Save to recently sent documents
-      dispatch(addRecentlySent({
+      const sentDocument = {
         id: Date.now(), // Simple ID generation
         subject: subject || "Untitled Document",
         recipientCount: recipients.length,
         fileCount: files.length,
         date: new Date().toISOString(),
         status: 'sent'
-      }));
+      };
+      
+      console.log("Saving to recently sent:", sentDocument);
+      dispatch(addRecentlySent(sentDocument));
       
       alert("Email sent successfully!");
     } catch (error) {
@@ -107,6 +111,18 @@ const ReviewSend = () => {
               <span>Recipients</span>
               <span>
                 {recipients.length} {recipientLabel}
+              </span>
+            </div>
+            <div className="review-send-box-content-item">
+              <span>Subject</span>
+              <span>
+                {subject || "No subject"}
+              </span>
+            </div>
+            <div className="review-send-box-content-item">
+              <span>Message</span>
+              <span>
+                {message || "No message"}
               </span>
             </div>
             <div className="review-send-box-content-item">

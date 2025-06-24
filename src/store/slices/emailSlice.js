@@ -1,8 +1,8 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-  subject: '',
-  message: '',
+  subject: 'Document for Signature',
+  message: 'Please review and sign the attached document.',
   recentlySent: [], 
 };
 

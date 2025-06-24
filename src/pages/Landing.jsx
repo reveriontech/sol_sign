@@ -49,7 +49,6 @@ const Landing = () => {
       hour: '2-digit',
       minute: '2-digit',
     });
-    navigate("/signmain")
   };
 
   return (
@@ -60,9 +59,14 @@ const Landing = () => {
             <h2>Recently Sent</h2>
             {recentlySent.length === 0 ? (
               <p className="no-recent">No documents sent yet</p>
-            ) : (
+             ) : (
               recentlySent.map((item, index) => (
-                <div key={item.id || index} className="recent-item">
+                <div 
+                  key={item.id || index} 
+                  className="recent-item"
+                  onClick={() => navigate("/signmain")}
+                  style={{ cursor: 'pointer' }}
+                >
                   <h3>{item.subject}</h3>
                   <p className="recent-details">
                     {item.recipientCount} recipient{item.recipientCount !== 1 ? 's' : ''} • {item.fileCount} file{item.fileCount !== 1 ? 's' : ''}

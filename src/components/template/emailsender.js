@@ -1,8 +1,8 @@
 import emailjs from "emailjs-com";
 
-const SERVICE_ID = "service_id";
-const TEMPLATE_ID = "template_id";
-const USER_ID = "user_id";
+const SERVICE_ID = "service_c7hb19g";
+const TEMPLATE_ID = "template_ebr33sg";
+const USER_ID = "IySvZB7dyZbYcqMij";
 
 export async function sendSignatureEmail({
   sender,

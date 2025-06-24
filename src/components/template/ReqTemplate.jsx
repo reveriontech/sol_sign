@@ -19,4 +19,4 @@ const ReqTemplate = () => {
   return <section>Example Template</section>;
 };
 
-export default ReqTemplate;
+export default ReqTemplate; 

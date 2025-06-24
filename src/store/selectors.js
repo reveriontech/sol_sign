@@ -24,6 +24,11 @@ export const selectSelectedRecipient = (state) => state.fields.selectedRecipient
 export const selectIsPlacingField = (state) => state.fields.isPlacingField;
 export const selectFieldTypes = (state) => state.fields.fieldTypes;
 
+// Email selectors
+export const selectEmailSubject = (state) => state.email.subject;
+export const selectEmailMessage = (state) => state.email.message;
+export const selectRecentlySent = (state) => state.email.recentlySent;
+
 // Derived selectors
 export const selectValidFiles = (state) => {
   const files = selectAllFiles(state);

@@ -11,11 +11,75 @@ $desktop: 1024px;
     width: 100%;
     margin-top: 7rem;
 
+    .recently-left-sidebar {
+        position: fixed;
+        top: 5.5rem;
+        left: 0;
+        width: 300px;
+        height: calc(100vh - 7rem);
+        background-color: landing.$color-white;
+        border-right: 1px solid landing.$color-gray-300;
+        padding: 1.5rem;
+        overflow-y: auto;
+        z-index: 10;
+
+        h2 {
+            font-size: 1.25rem;
+            font-weight: landing.$font-weight-bold;
+            color: landing.$color-black;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid landing.$color-primary;
+        }
+
+        .no-recent {
+            color: landing.$color-gray-600;
+            font-style: italic;
+            text-align: center;
+            margin-top: 2rem;
+        }
+
+        .recent-item {
+            padding: 1rem;
+            border: 1px solid landing.$color-gray-200;
+            border-radius: 0.5rem;
+            margin-bottom: 1rem;
+            background-color: landing.$color-gray-100;
+            transition: all 0.2s ease;
+
+            &:hover {
+                border-color: landing.$color-primary;
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            }
+
+            h3 {
+                font-size: 1rem;
+                font-weight: landing.$font-weight-medium;
+                color: landing.$color-black;
+                margin-bottom: 0.5rem;
+                line-height: 1.3;
+            }
+
+            .recent-details {
+                font-size: 0.875rem;
+                color: landing.$color-gray-600;
+                margin-bottom: 0.25rem;
+            }
+
+            .recent-date {
+                font-size: 0.75rem;
+                color: landing.$color-gray-500;
+                font-weight: landing.$font-weight-normal;
+            }
+        }
+    }
+
     // cards
     .landing-content {
         display: flex;
         flex-direction: column;
         margin-top: 4rem;
+        margin-left: 300px; 
 
         .landing-content-text {
             display: flex;
@@ -129,7 +193,19 @@ $desktop: 1024px;
 // Responsive styles
 @media (max-width: $tablet) {
   .landing-container {
+    .recently-left-sidebar {
+      position: fixed;
+      top: 7rem;
+      left: -300px; // Hide sidebar by default on tablet
+      transition: left 0.3s ease;
+      
+      &.show {
+        left: 0;
+      }
+    }
+    
     .landing-content {
+      margin-left: 0; // Remove margin on tablet
       margin-top: 2rem;
       .landing-content-text {
         padding: 1rem;
@@ -160,7 +236,14 @@ $desktop: 1024px;
 
 @media (max-width: $mobile) {
   .landing-container {
+    .recently-left-sidebar {
+      width: 250px; // Smaller width on mobile
+      top: 5rem; // Adjust top position for mobile
+      height: calc(100vh - 5rem);
+    }
+    
     .landing-content {
+      margin-left: 0;
       margin-top: 1rem;
       .landing-content-text {
         padding: 0.5rem;
@@ -190,7 +273,7 @@ $desktop: 1024px;
             font-size: 0.95rem;
             text-align: center;
           }
-          .card-button a {
+          .card-button button {
             font-size: 0.95rem;
             padding: 0.4rem 0.5rem;
             margin-top: 2rem;

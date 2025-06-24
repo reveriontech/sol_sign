@@ -1,0 +1,27 @@
+@use "../utils/variables" as filetitle;
+
+// Breakpoints
+$mobile: 360px;
+$tablet: 768px;
+$small-desktop: 1024px;
+$medium-desktop: 1280px;
+$large-desktop: 1440px;
+
+.file-title-container {
+    position: absolute;
+    top: 6rem;
+    left: 105rem;
+    padding: filetitle.$spacing-md;
+
+    input {
+        width: 110%;
+        height: 100%;
+        padding: filetitle.$spacing-xxs;
+        border: none;
+        outline: none;
+        background-color: transparent;
+        border-bottom: 1px solid filetitle.$color-gray-400;
+        border-right: 1px solid filetitle.$color-gray-400;
+
+    }
+}

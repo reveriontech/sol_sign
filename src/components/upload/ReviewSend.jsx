@@ -1,12 +1,14 @@
 import React, { useState, useRef, useEffect } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { selectAllFiles, selectAllRecipients } from "@/store/selectors";
+import { addRecentlySent } from "@/store/slices/emailSlice";
 import { SlArrowDown } from "react-icons/sl";
 import { sendSignatureEmail } from "@/components/template/emailsender";
 import { Session } from "@/routes/SessionProvider";
 import "@/styles/components/_reviewsend.scss";
 
 const ReviewSend = () => {
+  const dispatch = useDispatch();
   const files = useSelector(selectAllFiles);
   const recipients = useSelector(selectAllRecipients);
   const { userDetails } = Session();
@@ -67,6 +69,17 @@ const ReviewSend = () => {
         subject,
         message,
       });
+      
+      // Save to recently sent documents
+      dispatch(addRecentlySent({
+        id: Date.now(), // Simple ID generation
+        subject: subject || "Untitled Document",
+        recipientCount: recipients.length,
+        fileCount: files.length,
+        date: new Date().toISOString(),
+        status: 'sent'
+      }));
+      
       alert("Email sent successfully!");
     } catch (error) {
       alert("Failed to send email: " + (error?.text || error?.message || error));

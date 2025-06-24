@@ -356,26 +356,3 @@ $large-desktop: 1440px;
     }
   }
 }
-
-.add-recipients-form {
-  div {
-    position: relative;
-
-    input {
-      padding-bottom: 1.5rem;
-    }
-
-    .error-message {
-      position: absolute;
-      left: 0;
-      bottom: 0.2rem;
-      color: #e74c3c;
-      font-size: 0.85rem;
-      font-weight: 400;
-      margin: 0;
-      pointer-events: none;
-      background: transparent;
-      z-index: 2;
-    }
-  }
-}

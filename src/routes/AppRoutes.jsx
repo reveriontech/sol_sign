@@ -4,13 +4,14 @@ import PageLoader from "../components/PageLoader";
 import { SessionProvider } from "./SessionProvider";
 import AccessProvider from "./AccessProvider";
 import HomeProvider from "./HomeProvider";
+import { SidebarProvider } from "../context/SidebarContext";
 
 // For pages
-const Intro = React.lazy(() => import("../pages/Intro"));
-const Landing = React.lazy(() => import("../pages/Landing"));
-const UploadPage = React.lazy(() => import("../pages/UploadPage"));
+const Intro = React.lazy(() => import("@/pages/Intro"));
+const Landing = React.lazy(() => import("@/pages/Landing"));
+const UploadPage = React.lazy(() => import("@/pages/UploadPage"));
 const Home = React.lazy(() => import("../pages/Home"));
-// import SmartSignature from "../pages/SmartSignature";
+const SignMain = React.lazy(() => import("@/components/features/SignMain"));
 
 const AppRoutes = () => {
   return (
@@ -28,6 +29,8 @@ const AppRoutes = () => {
                 <Route path="/landing" element={<Landing />}/>
                 <Route path="/upload" element={<UploadPage />}/>
               </Route>
+
+              <Route path="/signmain" element={<SidebarProvider><SignMain /></SidebarProvider>} />
 
           </Routes>
         </Suspense>

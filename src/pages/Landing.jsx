@@ -4,12 +4,18 @@ import { selectRecentlySent } from "@/store/selectors";
 import "../styles/pages/_landing.scss";
 import { FaFilePdf, FaFileSignature } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+import { CiAlignRight, CiAlignLeft } from "react-icons/ci";
+import { useSidebar } from "@/context/SidebarContext";
+import { Session } from "../routes/SessionProvider";
+import SignOutFunctions from "../functions/SIgnOutFunctions";
+import { IoIosLogOut } from "react-icons/io";
+import profile from "../assets/images/solvistaicon.png";
 
 const Landing = () => {
   const { card, useCard } = useState();
   const navigate = useNavigate();
   const recentlySent = useSelector(selectRecentlySent);
-  
+  const { isCollapsed, toggleSidebar } = useSidebar();
   const cards = [
     {
       icon: <FaFilePdf />,
@@ -43,42 +49,96 @@ const Landing = () => {
   // Format date for display
   const formatDate = (dateString) => {
     const date = new Date(dateString);
-    return date.toLocaleDateString('en-US', { 
-      month: 'short', 
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit',
+    return date.toLocaleDateString("en-US", {
+      month: "short",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
     });
   };
 
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { loading, setLoading, user, setUser, userDetails, setUserDetails } =
+    Session();
+
+  const { isSigningOut, handleSignOut } = SignOutFunctions();
+
   return (
     <section className="landing-container">
+      {/* Sidebar Toggle Button */}
+      <button
+        className={`sidebar-toggle-btn${!isCollapsed ? " open" : ""}`}
+        onClick={toggleSidebar}
+        aria-label={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
+      >
+        {!isCollapsed ? <CiAlignRight size={32} /> : <CiAlignLeft size={32} />}
+      </button>
+
       {/* Recently left sidebar */}
-      <section className="recently-left-sidebar">
-         <div>
+      <section
+        className={`recently-left-sidebar${
+          !isCollapsed ? " show" : " collapsed"
+        }`}
+      >
+
+        <div className="sidebar-body">
+          <div className="sidebar-header">
             <h2>Recently Sent</h2>
-            {recentlySent.length === 0 ? (
-              <p className="no-recent">No documents sent yet</p>
-             ) : (
-              recentlySent.map((item, index) => (
-                <div 
-                  key={item.id || index} 
-                  className="recent-item"
-                  onClick={() => navigate("/signmain")}
-                  style={{ cursor: 'pointer' }}
-                >
-                  <h3>{item.subject}</h3>
-                  <p className="recent-details">
-                    {item.recipientCount} recipient{item.recipientCount !== 1 ? 's' : ''} • {item.fileCount} file{item.fileCount !== 1 ? 's' : ''}
-                  </p>
-                  <p className="recent-date">{formatDate(item.date)}</p>
-                </div>
-              ))
-            )}
-         </div>
+            <div className="recent-items-scroll">
+              {recentlySent.length === 0 ? (
+                <p className="no-recent">No documents sent yet</p>
+              ) : (
+                recentlySent.map((item, index) => (
+                  <div
+                    key={item.id || index}
+                    className="recent-item"
+                    onClick={() => navigate("/signmain")}
+                    style={{ cursor: "pointer" }}
+                  >
+                    <h3>{item.subject}</h3>
+                    <p className="recent-details">
+                      {item.recipientCount} recipient
+                      {item.recipientCount !== 1 ? "s" : ""} • {item.fileCount}{" "}
+                      file
+                      {item.fileCount !== 1 ? "s" : ""}
+                    </p>
+                    <p className="recent-date">{formatDate(item.date)}</p>
+                  </div>
+                ))
+              )}
+            </div>
+          </div>
+
+          {/* This is for profile */}
+          <div className={`profile ${isMenuOpen ? "show" : ""}`}>
+            <hr />
+            <div className="profile-info">
+              <img
+                className="profile-image"
+                src={
+                  user?.session?.user_metadata?.avatar_url ||
+                  userDetails?.picture ||
+                  profile
+                }
+                alt="Profile"
+                referrerPolicy="no-referrer"
+                crossOrigin="anonymous"
+              />
+              <p>{userDetails?.username?.split("@")[0]}</p>
+            </div>
+            <button className="logout-btn" onClick={handleSignOut}>
+              <IoIosLogOut size={24} />
+              <span className="logout-text">
+                {isSigningOut ? "Signing Out" : "Sign Out"}
+              </span>
+            </button>
+          </div>
+        </div>
       </section>
 
-      <div className="landing-content">
+      <div
+        className={`landing-content${isCollapsed ? " sidebar-collapsed" : ""}`}
+      >
         <div className="landing-content-text">
           <h1>Digital Signatures</h1>
           <p>

@@ -15,7 +15,7 @@ const PageLoader = () => {
       display: "flex",
       justifyContent: "center",
       alignItems: "center",
-      height: "60vh",
+      height: "100vh",
       fontFamily: "'Google Sans', 'Helvetica Neue', sans-serif",
     },
     loaderContent: {
@@ -27,8 +27,8 @@ const PageLoader = () => {
       fontWeight: 400,
     },
     svg: {
-      width: "64px",
-      height: "64px",
+      width: "7rem",
+      height: "7rem",
       display: "block",
       transform: `rotate(${rotation}deg)`,
       transition: "transform 0.1s linear",

@@ -90,8 +90,8 @@ const Landing = () => {
               ? " open mobile"
               : " mobile"
             : !isCollapsed
-              ? " open"
-              : ""
+            ? " open"
+            : ""
         }`}
         onClick={isMobile() ? handleMobileSidebarToggle : toggleSidebar}
         aria-label={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}

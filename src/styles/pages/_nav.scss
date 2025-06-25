@@ -22,15 +22,6 @@ nav {
     width: auto;
     object-fit: contain;
     transition: all 0.3s ease;
-
-    @media (max-width: $tablet) {
-      height: 2.5rem;
-    }
-
-    @media (max-width: $mobile) {
-      height: 1.5rem;
-      padding: 0.5rem;
-    }
   }
 
   .nav-right {
@@ -42,18 +33,7 @@ nav {
       display: none;
       cursor: pointer;
       z-index: 2;
-
-      @media (max-width: $tablet) {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: 0.5rem;
-        transition: all 0.2s ease-in-out;
-
-        &:hover {
-          background-color: rgba(0, 0, 0, 0.1);
-        }
-      }
+      
     }
 
     .profile {
@@ -228,6 +208,7 @@ nav {
   }
 }
 
+// Responsive for tablet 1024px
 @media (max-width: 1024px) {
   nav {
     padding: 0.5em 1rem;
@@ -237,11 +218,45 @@ nav {
   }
 }
 
+// Responsive for mobile 600px
 @media (max-width: 600px) {
   nav {
     padding: 0.25rem 0.5rem;
     .logo {
       height: 1.5rem;
     }
+  }
+}
+
+// Responsive for mobile 360px
+@media (max-width: 360px) {
+
+  .logo {
+    height: 1.7rem;
+  }
+
+  .recently-left-sidebar {
+    width: 100vw;
+    left: 0;
+    top: 3.5rem;
+    height: calc(100vh - 3.5rem);
+    padding: 0.5rem;
+    border-right: none;
+    border-bottom: 1px solid nav.$color-gray-300;
+    z-index: 100;
+  }
+  .landing-content {
+    margin-left: 0;
+    margin-top: 1rem;
+    padding: 0.25rem;
+  }
+  .sidebar-toggle-btn,
+  .sidebar-toggle-btn.open {
+    left: 0;
+    top: 6%;
+  }
+  .profile {
+    padding: 0.5rem;
+    margin-top: 1rem;
   }
 }

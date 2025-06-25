@@ -11,11 +11,14 @@ import SignOutFunctions from "../functions/SIgnOutFunctions";
 import { IoIosLogOut } from "react-icons/io";
 import profile from "../assets/images/solvistaicon.png";
 
+const isMobile = () => window.innerWidth <= 767;
+
 const Landing = () => {
   const { card, useCard } = useState();
   const navigate = useNavigate();
   const recentlySent = useSelector(selectRecentlySent);
   const { isCollapsed, toggleSidebar } = useSidebar();
+  const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
   const cards = [
     {
       icon: <FaFilePdf />,
@@ -63,27 +66,61 @@ const Landing = () => {
 
   const { isSigningOut, handleSignOut } = SignOutFunctions();
 
+  // Handle sidebar open/close for mobile
+  const handleMobileSidebarToggle = () => {
+    setMobileSidebarOpen((prev) => !prev);
+  };
+
+  // Hide sidebar by default on mobile
+  React.useEffect(() => {
+    const handleResize = () => {
+      if (isMobile()) setMobileSidebarOpen(false);
+    };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   return (
     <section className="landing-container">
       {/* Sidebar Toggle Button */}
       <button
-        className={`sidebar-toggle-btn${!isCollapsed ? " open" : ""}`}
-        onClick={toggleSidebar}
+        className={`sidebar-toggle-btn${
+          isMobile()
+            ? mobileSidebarOpen
+              ? " open mobile"
+              : " mobile"
+            : !isCollapsed
+              ? " open"
+              : ""
+        }`}
+        onClick={isMobile() ? handleMobileSidebarToggle : toggleSidebar}
         aria-label={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
       >
         {!isCollapsed ? <CiAlignRight size={32} /> : <CiAlignLeft size={32} />}
       </button>
 
-      {/* Recently left sidebar */}
+      {/* Sidebar Overlay for mobile */}
+      {isMobile() && mobileSidebarOpen && (
+        <div
+          className="sidebar-overlay"
+          onClick={handleMobileSidebarToggle}
+        ></div>
+      )}
+
+      {/* Sidebar */}
       <section
         className={`recently-left-sidebar${
           !isCollapsed ? " show" : " collapsed"
-        }`}
+        }${isMobile() && mobileSidebarOpen ? " mobile-open" : ""}`}
+        style={
+          isMobile() ? { display: mobileSidebarOpen ? "block" : "none" } : {}
+        }
       >
-
         <div className="sidebar-body">
           <div className="sidebar-header">
             <h2>Recently Sent</h2>
+
+            {/* This is for recent items */}
             <div className="recent-items-scroll">
               {recentlySent.length === 0 ? (
                 <p className="no-recent">No documents sent yet</p>
@@ -111,27 +148,29 @@ const Landing = () => {
 
           {/* This is for profile */}
           <div className={`profile ${isMenuOpen ? "show" : ""}`}>
-            <hr />
             <div className="profile-info">
-              <img
-                className="profile-image"
-                src={
-                  user?.session?.user_metadata?.avatar_url ||
-                  userDetails?.picture ||
-                  profile
-                }
-                alt="Profile"
-                referrerPolicy="no-referrer"
-                crossOrigin="anonymous"
-              />
-              <p>{userDetails?.username?.split("@")[0]}</p>
+              <div className="profile-info-container">
+                <img
+                  className="profile-image"
+                  src={
+                    user?.session?.user_metadata?.avatar_url ||
+                    userDetails?.picture ||
+                    profile
+                  }
+                  alt="Profile"
+                  referrerPolicy="no-referrer"
+                  crossOrigin="anonymous"
+                />
+                <p>{userDetails?.username?.split("@")[0]}</p>
+              </div>
+
+              <button className="logout-btn" onClick={handleSignOut}>
+                <IoIosLogOut size={24} />
+                <span className="logout-text">
+                  {isSigningOut ? "Signing Out" : "Sign Out"}
+                </span>
+              </button>
             </div>
-            <button className="logout-btn" onClick={handleSignOut}>
-              <IoIosLogOut size={24} />
-              <span className="logout-text">
-                {isSigningOut ? "Signing Out" : "Sign Out"}
-              </span>
-            </button>
           </div>
         </div>
       </section>
@@ -147,8 +186,7 @@ const Landing = () => {
           </p>
         </div>
 
-        {/* This is for cards */}
-
+        {/* This Main Cards Content*/}
         <div className="landing-content-cards">
           {cards.map((card, index) => (
             <div key={index} className="cards-container">
@@ -160,6 +198,33 @@ const Landing = () => {
               </div>
             </div>
           ))}
+        </div>
+      </div>
+
+      {/* Mobile Recent Items Section */}
+      <div className="mobile-recent-section">
+        <h2>Recently Sent</h2>
+        <div className="mobile-recent-items">
+          {recentlySent.length === 0 ? (
+            <p className="no-recent">No documents sent yet</p>
+          ) : (
+            recentlySent.map((item, index) => (
+              <div
+                key={item.id || index}
+                className="recent-item"
+                onClick={() => navigate("/signmain")}
+                style={{ cursor: "pointer" }}
+              >
+                <h3>{item.subject}</h3>
+                <p className="recent-details">
+                  {item.recipientCount} recipient
+                  {item.recipientCount !== 1 ? "s" : ""} • {item.fileCount} file
+                  {item.fileCount !== 1 ? "s" : ""}
+                </p>
+                <p className="recent-date">{formatDate(item.date)}</p>
+              </div>
+            ))
+          )}
         </div>
       </div>
     </section>

@@ -7,7 +7,7 @@ $desktop: 1024px;
 .progress-vertical-container {
   position: fixed;
   top: 10rem;
-  left: 16rem;
+  left: 12rem;
   z-index: 1000;
   pointer-events: none;
 
@@ -97,7 +97,7 @@ $desktop: 1024px;
     padding: 0.5rem;
     border: none;
     border-radius: 1rem;
-    
+
     .progress-stepper {
       flex-direction: row;
       .progress-step-wrapper {
@@ -123,30 +123,28 @@ $desktop: 1024px;
 
 // Tablet (<= 1280px)
 @media (max-width: 1280px) {
-    .progress-vertical-container {
-      top: 5rem;
-      left: 8rem;
-      .progress-stepper {
-        .progress-step-wrapper {
-          gap: 0.7rem;
-          .progress-line {
-            width: 24px;
-          }
-          .progress-step-circle {
-            width: 32px;
-            height: 32px;
-            font-size: 0.8rem;
-          }
-          .step-label {
-            max-width: 60px;
-            font-size: 0.7rem;
-          }
+  .progress-vertical-container {
+    top: 5rem;
+    left: 8rem;
+    .progress-stepper {
+      .progress-step-wrapper {
+        gap: 0.7rem;
+        .progress-line {
+          width: 24px;
+        }
+        .progress-step-circle {
+          width: 32px;
+          height: 32px;
+          font-size: 0.8rem;
+        }
+        .step-label {
+          max-width: 60px;
+          font-size: 0.7rem;
         }
       }
     }
   }
-  
-
+}
 
 // Tablet (<= 1024px)
 @media (max-width: 1024px) {
@@ -198,6 +196,32 @@ $desktop: 1024px;
   }
 }
 
+// Extra small mobile (<= 530px)
+@media (max-width: 530px) {
+    .progress-vertical-container {
+      top: 3.5rem;
+      left: 6.2rem;
+      transform: scale(1.4);
+      .progress-stepper {
+        .progress-step-wrapper {
+          gap: 0.2rem;
+          .progress-line {
+            width: 8px;
+          }
+          .progress-step-circle {
+            width: 14px;
+            height: 14px;
+            font-size: 0.4rem;
+          }
+          .step-label {
+            max-width: 24px;
+            font-size: 0.35rem;
+          }
+        }
+      }
+    }
+  }
+
 // Extra small mobile (<= 480px)
 @media (max-width: 480px) {
   .progress-vertical-container {
@@ -242,7 +266,7 @@ $desktop: 1024px;
           height: 14px;
           font-size: 0.4rem;
         }
-        .step-label {   
+        .step-label {
           max-width: 24px;
           font-size: 0.35rem;
         }

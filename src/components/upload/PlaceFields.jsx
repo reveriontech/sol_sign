@@ -17,6 +17,7 @@ import {
   addFiles,
   setCurrentDocumentIndex,
 } from "@/store/slices/documentSlice";
+import { setStepCompleted, setStepActive } from "@/store/slices/progressSlice";
 
 pdfjs.GlobalWorkerOptions.workerSrc = pdfWorker;
 
@@ -41,6 +42,17 @@ const PlaceFields = () => {
   const [numPages, setNumPages] = useState(null);
   const [pageNumber, setPageNumber] = useState(1);
   const [containerWidth, setContainerWidth] = useState(0);
+
+  // Check if step 3 is completed (has fields placed)
+  useEffect(() => {
+    const hasFields = fields.length > 0;
+
+    dispatch(setStepCompleted({ step: 3, completed: hasFields }));
+
+    if (hasFields) {
+      dispatch(setStepActive({ step: 4, active: true }));
+    }
+  }, [fields, dispatch]);
 
   // Refs
   const pdfWrapperRef = useRef(null);
@@ -188,8 +200,8 @@ const PlaceFields = () => {
       <section className="placefields-container">
         <div className="placefields-box-container">
           <div className="placefields-box-header">
-                <h1>Place Fields</h1>
-            </div>
+            <h1>Place Fields</h1>
+          </div>
 
           <div className="placefields-box-content">
             {currentDocumentUrl ? (
@@ -348,16 +360,21 @@ const PlaceFields = () => {
                   <div className="document-navigation">
                     <button
                       disabled={currentDocumentIndex <= 0}
-                      onClick={() => handleDocumentChange(currentDocumentIndex - 1)}
+                      onClick={() =>
+                        handleDocumentChange(currentDocumentIndex - 1)
+                      }
                     >
                       ‹
                     </button>
                     <span>
-                      Document {currentDocumentIndex + 1} of {documentUrls.length}
+                      Document {currentDocumentIndex + 1} of{" "}
+                      {documentUrls.length}
                     </span>
                     <button
                       disabled={currentDocumentIndex >= documentUrls.length - 1}
-                      onClick={() => handleDocumentChange(currentDocumentIndex + 1)}
+                      onClick={() =>
+                        handleDocumentChange(currentDocumentIndex + 1)
+                      }
                     >
                       ›
                     </button>
@@ -394,8 +411,8 @@ const PlaceFields = () => {
               <button className="cancel-modal-btn" onClick={handleCancel}>
                 Cancel
               </button>
-                </div>
             </div>
+          </div>
         </div>
       )}
     </>

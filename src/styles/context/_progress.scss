@@ -1,0 +1,88 @@
+@use "../utils/variables" as progress;
+
+$mobile: 360px;
+$tablet: 768px;
+$desktop: 1024px;
+
+.progress-vertical-container {
+  position: fixed;
+  top: 10rem;
+  left: 3rem;
+  z-index: 1000;
+  pointer-events: none; 
+
+  .progress-stepper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative; 
+
+    .progress-step-wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+
+      .progress-line {
+        width: 1.5px;
+        height: 32px;
+        background: #294386;
+        margin: 0.2rem 0.2rem;
+        z-index: 0;
+        transition: background 0.3s ease;
+
+        &.completed {
+          background: #294386;
+        }
+      }
+
+      .progress-step-circle {
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        border: 1.5px solid #294386;
+        background: #fff;
+        color: #000;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: progress.$font-size-sm;
+        font-weight: normal;
+        z-index: 1;
+        margin: 0.25rem 0;
+        transition: all 0.3s ease;
+        cursor: pointer;
+
+        &.active {
+          background: #ffffff;
+          color: #fff;
+          border: 2px solid #294386;
+        }
+
+        &.completed {
+          background: #294386;
+          box-shadow: 0 0 10px rgba(76, 175, 80, 0.3);
+        }
+      }
+
+      .step-label {
+        font-size: progress.$font-size-xs;
+        color: #666;
+        text-align: center;
+        max-width: 80px;
+        line-height: 1.2;
+        transition: color 0.3s ease;
+
+        .progress-step-circle.active + & {
+          color: #ffffff;
+          font-weight: progress.$font-weight-medium;
+        }
+
+        .progress-step-circle.completed + & {
+          color: #294386;
+          font-weight: progress.$font-weight-medium;
+        }
+      }
+    }
+  }
+}

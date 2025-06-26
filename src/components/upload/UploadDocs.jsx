@@ -12,6 +12,7 @@ import {
   addDocumentUrl,
   clearAllDocuments,
 } from "@/store/slices/documentSlice";
+import { setStepCompleted, setStepActive } from "@/store/slices/progressSlice";
 
 const MAX_FILES = 10;
 const MAX_FILE_SIZE_MB = 20;
@@ -19,7 +20,9 @@ const MAX_FILE_SIZE_BYTES = MAX_FILE_SIZE_MB * 1024 * 1024;
 
 const UploadDocs = () => {
   const dispatch = useDispatch();
-  const { selectedFiles, loadingFiles, fileStatuses } = useSelector(
+  const { selectedFiles, loadingFiles, fileStatuses 
+    
+  } = useSelector(
     (state) => state.document
   );
 
@@ -28,6 +31,19 @@ const UploadDocs = () => {
   const [filesToProcess, setFilesToProcess] = useState([]);
   const [fileErrors, setFileErrors] = useState({});
   const [isProcessing, setIsProcessing] = useState(false);
+
+  // Check if step 1 is completed (has valid files)
+  useEffect(() => {
+    const hasValidFiles =
+      selectedFiles.length > 0 &&
+      selectedFiles.every((file) => fileStatuses[file.name] === "success");
+
+    dispatch(setStepCompleted({ step: 1, completed: hasValidFiles }));
+
+    if (hasValidFiles) {
+      dispatch(setStepActive({ step: 2, active: true }));
+    }
+  }, [selectedFiles, fileStatuses, dispatch]);
 
   const validateAndProcessFile = useCallback(
     async (file) => {

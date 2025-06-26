@@ -3,6 +3,7 @@ import documentSlice from './slices/documentSlice';
 import recipientsSlice from './slices/recipientsSlice';
 import fieldsSlice from './slices/fieldsSlice';
 import emailSlice from './slices/emailSlice';
+import progressSlice from './slices/progressSlice';
 
 export const store = configureStore({
   reducer: {
@@ -10,6 +11,7 @@ export const store = configureStore({
     recipients: recipientsSlice,
     fields: fieldsSlice,
     email: emailSlice,
+    progress: progressSlice,
   },
 });
 

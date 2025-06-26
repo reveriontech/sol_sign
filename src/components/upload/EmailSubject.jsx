@@ -1,12 +1,26 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "@/styles/components/_emailsubject.scss";
 import { useSelector, useDispatch } from "react-redux";
 import { setSubject, setMessage } from "@/store/slices/emailSlice";
+import { setStepCompleted, setStepActive } from "@/store/slices/progressSlice";
 
 const EmailSubject = () => {
   const dispatch = useDispatch();
   const { recipients } = useSelector((state) => state.recipients);
   const { subject, message } = useSelector((state) => state.email);
+
+  // Check if step 4 is completed (has subject and message)
+  useEffect(() => {
+    const hasSubject = subject.trim().length > 0;
+    const hasMessage = message.trim().length > 0;
+    const isCompleted = hasSubject && hasMessage;
+
+    dispatch(setStepCompleted({ step: 4, completed: isCompleted }));
+
+    if (isCompleted) {
+      dispatch(setStepActive({ step: 5, active: true }));
+    }
+  }, [subject, message, dispatch]);
 
   return (
     <section className="email-subject-container">
@@ -24,7 +38,7 @@ const EmailSubject = () => {
               type="text"
               placeholder="Enter subject"
               value={subject}
-              onChange={e => dispatch(setSubject(e.target.value))}
+              onChange={(e) => dispatch(setSubject(e.target.value))}
             />
           </div>
           <div className="email-recipient">
@@ -48,7 +62,7 @@ const EmailSubject = () => {
             id=""
             placeholder="Enter message"
             value={message}
-            onChange={e => dispatch(setMessage(e.target.value))}
+            onChange={(e) => dispatch(setMessage(e.target.value))}
           ></textarea>
         </div>
       </div>

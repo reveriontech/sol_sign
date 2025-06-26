@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import "@/styles/components/_addrecipients.scss";
 import {
@@ -12,6 +12,7 @@ import {
   addRecipient,
   removeRecipient,
 } from "@/store/slices/recipientsSlice";
+import { setStepCompleted, setStepActive } from "@/store/slices/progressSlice";
 
 const AddRecipients = () => {
   const dispatch = useDispatch();
@@ -26,6 +27,17 @@ const AddRecipients = () => {
     roleTouched,
     roles,
   } = useSelector((state) => state.recipients);
+
+  // Check if step 2 is completed (has recipients)
+  useEffect(() => {
+    const hasRecipients = recipients.length > 0;
+
+    dispatch(setStepCompleted({ step: 2, completed: hasRecipients }));
+
+    if (hasRecipients) {
+      dispatch(setStepActive({ step: 3, active: true }));
+    }
+  }, [recipients, dispatch]);
 
   const handleRoleChange = (role) => {
     dispatch(setSelectedRole(role));
@@ -81,7 +93,11 @@ const AddRecipients = () => {
               <input
                 type="text"
                 id="name"
-                placeholder={nameTouched && !isNameValid ? "Name is required." : "Enter name"}
+                placeholder={
+                  nameTouched && !isNameValid
+                    ? "Name is required."
+                    : "Enter name"
+                }
                 value={name}
                 onChange={(e) => dispatch(setName(e.target.value))}
                 onBlur={() => dispatch(setNameTouched(true))}
@@ -99,12 +115,18 @@ const AddRecipients = () => {
               <input
                 type="email"
                 id="email"
-                placeholder={emailTouched && !isEmailValid ? "Enter a valid email." : "Enter email"}
+                placeholder={
+                  emailTouched && !isEmailValid
+                    ? "Enter a valid email."
+                    : "Enter email"
+                }
                 value={email}
                 onChange={(e) => dispatch(setEmail(e.target.value))}
                 onBlur={() => dispatch(setEmailTouched(true))}
                 className={emailTouched && !isEmailValid ? "input-error" : ""}
-                style={emailTouched && !isEmailValid ? { color: "#e74c3c" } : {}}
+                style={
+                  emailTouched && !isEmailValid ? { color: "#e74c3c" } : {}
+                }
               />
               {emailTouched && !isEmailValid && (
                 <span className="error-message">Enter a valid email.</span>
@@ -116,14 +138,22 @@ const AddRecipients = () => {
               <label>Role</label>
               <div className="custom-dropdown">
                 <div
-                  className={`dropdown-header${roleTouched && !isRoleValid ? " input-error" : ""}`}
+                  className={`dropdown-header${
+                    roleTouched && !isRoleValid ? " input-error" : ""
+                  }`}
                   onClick={() => {
                     toggleDropdown();
                     dispatch(setRoleTouched(true));
                   }}
                 >
-                  <span style={roleTouched && !isRoleValid ? { color: "#e74c3c" } : {}}>
-                    {roleTouched && !isRoleValid ? "Select a role." : selectedRole}
+                  <span
+                    style={
+                      roleTouched && !isRoleValid ? { color: "#e74c3c" } : {}
+                    }
+                  >
+                    {roleTouched && !isRoleValid
+                      ? "Select a role."
+                      : selectedRole}
                   </span>
                   <span className={`arrow ${isDropdownOpen ? "open" : ""}`}>
                     ▼

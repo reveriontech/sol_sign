@@ -1,10 +1,16 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { selectAllFiles, selectAllRecipients, selectEmailSubject, selectEmailMessage } from "@/store/selectors";
+import {
+  selectAllFiles,
+  selectAllRecipients,
+  selectEmailSubject,
+  selectEmailMessage,
+} from "@/store/selectors";
 import { addRecentlySent } from "@/store/slices/emailSlice";
 import { SlArrowDown } from "react-icons/sl";
 import { sendSignatureEmail } from "@/components/template/emailsender";
 import { Session } from "@/routes/SessionProvider";
+import { setStepCompleted } from "@/store/slices/progressSlice";
 import "@/styles/components/_reviewsend.scss";
 
 const ReviewSend = () => {
@@ -15,9 +21,21 @@ const ReviewSend = () => {
   const message = useSelector(selectEmailMessage);
   const { userDetails } = Session();
 
+  // Check if step 5 is completed (all previous steps are complete)
+  useEffect(() => {
+    const hasFiles = files.length > 0;
+    const hasRecipients = recipients.length > 0;
+    const hasSubject = subject.trim().length > 0;
+    const hasMessage = message.trim().length > 0;
+
+    const isCompleted = hasFiles && hasRecipients && hasSubject && hasMessage;
+
+    dispatch(setStepCompleted({ step: 5, completed: isCompleted }));
+  }, [files, recipients, subject, message, dispatch]);
+
   // Estimated Completion dropdown state
   const [dropdownOpen, setDropdownOpen] = useState(false);
-  const [businessDays, setBusinessDays] = useState(3); // default to 3
+  const [businessDays, setBusinessDays] = useState(3);
   const dropdownRef = useRef(null);
 
   // Close dropdown on outside click
@@ -55,11 +73,16 @@ const ReviewSend = () => {
       alert("No recipients to send to.");
       return;
     }
-    
-    console.log("Sending email with:", { subject, message, recipients: recipients.length, files: files.length });
-    
+
+    console.log("Sending email with:", {
+      subject,
+      message,
+      recipients: recipients.length,
+      files: files.length,
+    });
+
     const sender = userDetails?.username || "Sender";
-    const recipientEmails = recipients.map(r => r.email).join(", ");
+    const recipientEmails = recipients.map((r) => r.email).join(", ");
     try {
       await sendSignatureEmail({
         sender,
@@ -70,7 +93,7 @@ const ReviewSend = () => {
         subject,
         message,
       });
-      
+
       // Save to recently sent documents
       const sentDocument = {
         id: Date.now(), // Simple ID generation
@@ -78,15 +101,17 @@ const ReviewSend = () => {
         recipientCount: recipients.length,
         fileCount: files.length,
         date: new Date().toISOString(),
-        status: 'sent'
+        status: "sent",
       };
-      
+
       console.log("Saving to recently sent:", sentDocument);
       dispatch(addRecentlySent(sentDocument));
-      
+
       alert("Email sent successfully!");
     } catch (error) {
-      alert("Failed to send email: " + (error?.text || error?.message || error));
+      alert(
+        "Failed to send email: " + (error?.text || error?.message || error)
+      );
     }
   };
 
@@ -115,15 +140,11 @@ const ReviewSend = () => {
             </div>
             <div className="review-send-box-content-item">
               <span>Subject</span>
-              <span>
-                {subject || "No subject"}
-              </span>
+              <span>{subject || "No subject"}</span>
             </div>
             <div className="review-send-box-content-item">
               <span>Message</span>
-              <span>
-                {message || "No message"}
-              </span>
+              <span>{message || "No message"}</span>
             </div>
             <div className="review-send-box-content-item">
               <span>Estimated Completion</span>
@@ -132,9 +153,15 @@ const ReviewSend = () => {
                   className="dropdown-value"
                   onClick={() => setDropdownOpen((open) => !open)}
                   tabIndex={0}
-                  style={{ cursor: "pointer", display: "inline-flex", alignItems: "center", gap: "0.3rem" }}
+                  style={{
+                    cursor: "pointer",
+                    display: "inline-flex",
+                    alignItems: "center",
+                    gap: "0.3rem",
+                  }}
                 >
-                  Ends in {businessDays} business days <SlArrowDown style={{ fontSize: "1em" }} />
+                  Ends in {businessDays} business days{" "}
+                  <SlArrowDown style={{ fontSize: "1em" }} />
                 </span>
 
                 {/* Dropdown Menu */}
@@ -190,7 +217,11 @@ const ReviewSend = () => {
           </div>
           <div className="review-send-actions">
             <button className="btn-draft">Save as Draft</button>
-            <button className="btn-send" type="button" onClick={handleSendForSignature}>
+            <button
+              className="btn-send"
+              type="button"
+              onClick={handleSendForSignature}
+            >
               Send for Signature
             </button>
           </div>

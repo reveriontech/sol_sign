@@ -15,3 +15,10 @@ $desktop: 1024px;
     overflow-y: auto;
 }
 
+@media (max-width: 468px) {
+  .upload-container {
+    margin-top: 5rem;
+  }
+}
+
+

@@ -7,15 +7,15 @@ $desktop: 1024px;
 .progress-vertical-container {
   position: fixed;
   top: 10rem;
-  left: 3rem;
+  left: 16rem;
   z-index: 1000;
-  pointer-events: none; 
+  pointer-events: none;
 
   .progress-stepper {
     display: flex;
     flex-direction: column;
     align-items: center;
-    position: relative; 
+    position: relative;
 
     .progress-step-wrapper {
       display: flex;
@@ -56,7 +56,6 @@ $desktop: 1024px;
         &.active {
           background: #ffffff;
           color: #fff;
-          border: 2px solid #294386;
         }
 
         &.completed {
@@ -81,6 +80,171 @@ $desktop: 1024px;
         .progress-step-circle.completed + & {
           color: #294386;
           font-weight: progress.$font-weight-medium;
+        }
+      }
+    }
+  }
+}
+
+// Desktop horizontal (<= 1440px)
+@media (max-width: 1440px) {
+  .progress-vertical-container {
+    top: 5rem;
+    left: 10rem;
+    padding: 0.5rem;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    padding: 0.5rem;
+    border: none;
+    border-radius: 1rem;
+    
+    .progress-stepper {
+      flex-direction: row;
+      .progress-step-wrapper {
+        flex-direction: row;
+        gap: 1rem;
+        .progress-line {
+          width: 32px;
+          height: 1.5px;
+        }
+        .progress-step-circle {
+          width: 40px;
+          height: 40px;
+          font-size: 0.9rem;
+        }
+        .step-label {
+          margin: 0.1rem;
+          max-width: 70px;
+        }
+      }
+    }
+  }
+}
+
+// Tablet (<= 1280px)
+@media (max-width: 1280px) {
+    .progress-vertical-container {
+      top: 5rem;
+      left: 8rem;
+      .progress-stepper {
+        .progress-step-wrapper {
+          gap: 0.7rem;
+          .progress-line {
+            width: 24px;
+          }
+          .progress-step-circle {
+            width: 32px;
+            height: 32px;
+            font-size: 0.8rem;
+          }
+          .step-label {
+            max-width: 60px;
+            font-size: 0.7rem;
+          }
+        }
+      }
+    }
+  }
+  
+
+
+// Tablet (<= 1024px)
+@media (max-width: 1024px) {
+  .progress-vertical-container {
+    top: 3.5rem;
+    left: 5.5rem;
+    .progress-stepper {
+      .progress-step-wrapper {
+        gap: 0.7rem;
+        .progress-line {
+          width: 24px;
+        }
+        .progress-step-circle {
+          width: 32px;
+          height: 32px;
+          font-size: 0.8rem;
+        }
+        .step-label {
+          max-width: 60px;
+          font-size: 0.7rem;
+        }
+      }
+    }
+  }
+}
+
+// Mobile (<= 768px)
+@media (max-width: 770px) {
+  .progress-vertical-container {
+    top: 4rem;
+    left: 6rem;
+    .progress-stepper {
+      .progress-step-wrapper {
+        gap: 0.4rem;
+        .progress-line {
+          width: 14px;
+        }
+        .progress-step-circle {
+          width: 22px;
+          height: 22px;
+          font-size: 0.6rem;
+        }
+        .step-label {
+          max-width: 40px;
+          font-size: 0.55rem;
+        }
+      }
+    }
+  }
+}
+
+// Extra small mobile (<= 480px)
+@media (max-width: 480px) {
+  .progress-vertical-container {
+    top: 3.5rem;
+    left: 4rem;
+    transform: scale(1.2);
+    .progress-stepper {
+      .progress-step-wrapper {
+        gap: 0.2rem;
+        .progress-line {
+          width: 8px;
+        }
+        .progress-step-circle {
+          width: 14px;
+          height: 14px;
+          font-size: 0.4rem;
+        }
+        .step-label {
+          max-width: 24px;
+          font-size: 0.35rem;
+        }
+      }
+    }
+  }
+}
+
+// ultra small mobile (<= 360px)
+@media (max-width: 360px) {
+  .progress-vertical-container {
+    top: 3rem;
+    left: 1rem;
+    transform: scale(1);
+
+    .progress-stepper {
+      .progress-step-wrapper {
+        gap: 0.2rem;
+        .progress-line {
+          width: 8px;
+        }
+        .progress-step-circle {
+          width: 14px;
+          height: 14px;
+          font-size: 0.4rem;
+        }
+        .step-label {   
+          max-width: 24px;
+          font-size: 0.35rem;
         }
       }
     }

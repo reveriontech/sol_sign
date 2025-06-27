@@ -1,8 +1,12 @@
 import React from 'react'
-
+import "@/styles/feature/_signing.scss";
 const Signing = () => {
   return (
-    <div>Signing</div>
+    <div className="signing-container">
+      <div className="signing-header">
+        <h1>Signing</h1>
+      </div>
+    </div>
   )
 }
 

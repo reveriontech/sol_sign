@@ -1,9 +1,10 @@
 import React from 'react'
 import { Outlet } from 'react-router-dom'
 import { useSidebar } from '@/context/SidebarContext'
+import "@/styles/feature/_mainsign.scss";
 
 // reusable components
-import Sidebar from "@/reusable/Sidebar";
+import Sidebar from "./Sidebar";
 import Signing from './sign/Signing'
 
 // feature

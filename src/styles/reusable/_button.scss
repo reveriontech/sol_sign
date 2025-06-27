@@ -21,11 +21,18 @@ $desktop: 1024px;
   font-family: inherit;
   font-size: 1rem;
   line-height: 1.5;
+  position: relative;
 
   &:disabled {
     opacity: 0.6;
     cursor: not-allowed;
     pointer-events: none;
+  }
+
+  // Full width option
+  &--full-width {
+    width: 100%;
+    min-width: 100%;
   }
 
   // Size variants
@@ -43,62 +50,97 @@ $desktop: 1024px;
 
   // Primary button styles
   &--primary {
-    background-color: #2563eb;
-    color: white;
-    box-shadow: 0 2px 4px rgba(37, 99, 235, 0.1);
+    background-color: button.$color-primary;
+    color: button.$color-white;
+    box-shadow: 0 2px 4px rgba(244, 67, 54, 0.1);
 
     &:hover:not(:disabled) {
-      background-color: #1d4ed8;
-      box-shadow: 0 4px 6px rgba(37, 99, 235, 0.15);
+      background-color: button.$color-second-primary;
+      box-shadow: 0 4px 6px rgba(244, 67, 54, 0.15);
     }
 
     &:active:not(:disabled) {
-      background-color: #1d4ed8;
+      background-color: button.$color-second-primary;
       transform: translateY(1px);
     }
   }
 
   // Secondary button styles
   &--secondary {
-    background-color: #374151;
-    color: white;
+    background-color: button.$color-gray-400;
+    color: button.$color-white;
 
     &:hover:not(:disabled) {
-      background-color: #1f2937;
+      background-color: button.$color-gray-600;
     }
 
     &:active:not(:disabled) {
-      background-color: #111827;
+      background-color: button.$color-gray-900;
     }
   }
 
   // Outline button styles
   &--outline {
-    border: 2px solid button.$color-gray-600;
+    border: 2px solid button.$color-primary;
     background-color: transparent;
-    color: button.$color-gray-600;
+    color: button.$color-primary;
 
     &:hover:not(:disabled) {
-      background-color: button.$color-blue-50;
-      color: button.$color-gray-300;
+      background-color: button.$color-primary;
+      color: button.$color-white;
     }
 
     &:active:not(:disabled) {
-      background-color: #1d4ed8;
+      background-color: button.$color-second-primary;
+      border-color: button.$color-second-primary;
     }
   }
 
   // Danger button styles
   &--danger {
-    background-color: #ef4444;
-    color: white;
+    background-color: button.$color-danger;
+    color: button.$color-white;
 
     &:hover:not(:disabled) {
-      background-color: #dc2626;
+      background-color: #d32f2f;
     }
 
     &:active:not(:disabled) {
-      background-color: #b91c1c;
+      background-color: #b71c1c;
+    }
+  }
+
+  // Ghost button styles
+  &--ghost {
+    background-color: transparent;
+    color: button.$color-primary;
+    border: 1px solid transparent;
+
+    &:hover:not(:disabled) {
+      background-color: rgba(244, 67, 54, 0.1);
+      border-color: button.$color-primary;
+    }
+
+    &:active:not(:disabled) {
+      background-color: rgba(244, 67, 54, 0.2);
+    }
+  }
+
+  // Link button styles
+  &--link {
+    background-color: transparent;
+    color: button.$color-primary;
+    text-decoration: underline;
+    padding: 0.5rem 0.75rem;
+    min-width: auto;
+
+    &:hover:not(:disabled) {
+      color: button.$color-second-primary;
+      text-decoration: none;
+    }
+
+    &:active:not(:disabled) {
+      color: button.$color-accent-dark;
     }
   }
 
@@ -106,6 +148,7 @@ $desktop: 1024px;
   &--loading {
     position: relative;
     pointer-events: none;
+    color: transparent;
 
     &::after {
       content: "";

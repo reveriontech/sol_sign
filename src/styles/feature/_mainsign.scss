@@ -7,4 +7,13 @@ $small-desktop: 1024px;
 $medium-desktop: 1280px;
 $large-desktop: 1440px;
 
+.main-content {
+  transition: margin-left 0.3s;
+  margin-left: 18rem; // expanded sidebar width
+
+  &.sidebar-collapsed {
+    margin-left: 4rem; // collapsed sidebar width
+  }
+}
+
 
